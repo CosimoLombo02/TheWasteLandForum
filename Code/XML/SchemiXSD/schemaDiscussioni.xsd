@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+<xsd:element name="discussioni">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="discussione" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="discussione">
+   <xsd:complexType>
+      <xsd:sequence>
+         <xsd:element ref="codiceDiscussione" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="Titolo" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="dataCreazioneD" minOccurs="1" maxOccurs="1"  />
+         <xsd:element ref="nomeUtenteCreatoreDiscussione" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="MediaDiRiferimento" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="Categoria" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="Sottocategoria" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="CategoriaSpoiler" minOccurs="0" maxOccurs="1" />
+         <xsd:element ref="SpoilerLevel" minOccurs="0" maxOccurs="1" />
+         <xsd:element ref="Descrizione" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="ModeratoriEletti" minOccurs="1" maxOccurs="1"/>
+         <xsd:element ref="listaPost" minOccurs="1" maxOccurs="1"/>
+         <xsd:element ref="valutazioniDiscussioneAccordanza" minOccurs="1" maxOccurs="1"/>
+         <xsd:element ref="valutazioniDiscussioneSpoiler" minOccurs="1" maxOccurs="1"/>
+         <xsd:element ref="valutazioniDiscussioneUtilità" minOccurs="1" maxOccurs="1"/>
+         <xsd:element ref="statoDiscussione" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="utentiSospesi" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="codiceDiscussione" type="xsd:string" />
+
+<xsd:element name="Titolo" type="xsd:string" />
+
+<xsd:element name="dataCreazioneD" type="xsd:date"  />
+
+<xsd:element name="nomeUtenteCreatoreDiscussione" type="xsd:string" />
+
+<xsd:element name="MediaDiRiferimento" type="xsd:string" />
+
+<xsd:element name="Categoria" type="xsd:string" />
+
+<xsd:element name="Sottocategoria" type="xsd:string" />
+
+<xsd:element name="CategoriaSpoiler" type="xsd:string" />
+
+<xsd:element name="SpoilerLevel" type="xsd:integer" />
+
+<xsd:element name="Descrizione" type="xsd:string" />
+
+<xsd:element name="statoDiscussione" type="xsd:string" />
+
+
+<xsd:element name="ModeratoriEletti">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element name="nomeUtenteModeratore" minOccurs="0" maxOccurs="unbounded" type="xsd:string"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="listaPost">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="post" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="post">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="codicePost" minOccurs="1" maxOccurs="1"  />
+     <xsd:element ref="utenteCreatorePost" minOccurs="1" maxOccurs="1"  />
+     <xsd:element ref="dataCreazione" minOccurs="1" maxOccurs="1"  />
+     <xsd:element ref="oraCreazione" minOccurs="1" maxOccurs="1"  />
+     <xsd:element ref="utenteDestRisposta" minOccurs="0" maxOccurs="1"  />
+     <xsd:element ref="testoPost" minOccurs = "1" maxOccurs = "1"/>
+     <xsd:element ref="filePost" minOccurs ="1" maxOccurs = "1"/>
+     <xsd:element ref="valPostAccordanza" minOccurs ="1" maxOccurs = "1"/>
+     <xsd:element ref="valPostUtilità" minOccurs ="1" maxOccurs = "1"/>
+     <xsd:element ref="statoPost" minOccurs ="1" maxOccurs = "1"/>
+
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="codicePost"  type="xsd:integer" />
+
+<xsd:element name="utenteCreatorePost"  type="xsd:string" />
+
+<xsd:element name="dataCreazione"  type="xsd:date" />
+
+<xsd:element name="oraCreazione"  type="xsd:time" />
+
+<xsd:element name="utenteDestRisposta" type="xsd:string" />
+
+<xsd:element name="testoPost" type="xsd:string"/>
+
+<xsd:element name="statoPost" type="xsd:string"/>
+
+<xsd:element name="filePost">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element name="fileSrc" minOccurs="0" maxOccurs="2" type="xsd:string" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valPostAccordanza">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="valutazioneAcc" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valutazioneAcc">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="data" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="valore" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="nomeUtente" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valPostUtilità">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="valUt" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valUt">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="data" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="valore" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="nomeUtente" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+
+<xsd:element name="valutazioniDiscussioneAccordanza">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="valutazioneDiscussioneAccordanza" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valutazioneDiscussioneAccordanza">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="data" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="valore" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="nomeUtente" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valutazioniDiscussioneSpoiler">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="valutazioneDiscussioneSpoiler" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valutazioneDiscussioneSpoiler">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="data" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="valore" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="nomeUtente" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valutazioniDiscussioneUtilità">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="valDiscUt" minOccurs="0" maxOccurs="unbounded"/>
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="valDiscUt">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="data" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="valore" minOccurs="1" maxOccurs="1" />
+     <xsd:element ref="nomeUtente" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+<xsd:element name="utentiSospesi">
+   <xsd:complexType> 
+      <xsd:sequence>
+	 <xsd:element ref="nomeUtente" minOccurs="0" maxOccurs="unbounded" />
+      </xsd:sequence>
+   </xsd:complexType>
+</xsd:element>
+
+
+
+
+
+<xsd:element name="nomeUtente" type="xsd:string" />
+<xsd:element name="valore" type="xsd:integer" />
+<xsd:element name="data" type="xsd:date" />
+
+
+
+</xsd:schema>

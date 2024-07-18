@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE segnalazioni SYSTEM "DTD\segnalazioniDTD.dtd">
+<segnalazioni>
+<segnalazione>
+<codiceSegnalazione></codiceSegnalazione>
+<utenteSegnalatore></utenteSegnalatore>
+<data></data>
+<codicePostSegnalato></codicePostSegnalato>
+<codiceDiscussione></codiceDiscussione>
+<motivazione></motivazione>
+<utenteCreatorePost></utenteCreatorePost>
+<stato></stato>
+<risaltoAdmin></risaltoAdmin>
+</segnalazione>
+</segnalazioni>

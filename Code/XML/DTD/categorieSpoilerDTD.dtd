@@ -1,0 +1,5 @@
+<!ELEMENT CategorieSpoiler (CategoriaSpoiler+)>
+<!ELEMENT CategoriaSpoiler (nome+, utenteCreatore*, dataInserimento*)>
+<!ELEMENT nome (#PCDATA)>
+<!ELEMENT utenteCreatore (#PCDATA)>
+<!ELEMENT dataInserimento (#PCDATA)>

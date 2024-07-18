@@ -1,0 +1,58 @@
+body.blackBody{
+    background-color: black;
+}
+
+div.topnav {
+    background-color: black;
+    overflow: hidden;
+    margin-left: 4.5%;
+    margin-right: 4.5%;
+    
+  }
+
+  .topnav a {
+    float: left;
+    color: green;
+    text-align: center;
+    padding: 12px 14px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Share Tech Mono';
+    background-color: black;
+    
+  }
+
+  /* cambia il colore quando si passa sopra con il mouse */
+.topnav a:hover {
+    background-color: green;
+    color: black;
+  }
+  
+  /* colora il link attivo */
+  .topnav a.active {
+    background-color: black;
+    color: yellow;
+  }
+
+  div.container {
+    display: flex;
+    justify-content: center;
+  }
+  
+  div.videoCentrato {
+    width: 100px;
+    margin-left:0%;
+    margin-right:30%;
+  }
+
+  div.item{
+    width: 100px;
+    margin:0 auto;
+  }
+
+  div.itemText{
+    width: 50%;
+    margin:0 auto;
+  }
+  
+  

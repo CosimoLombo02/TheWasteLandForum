@@ -1,0 +1,31 @@
+div{
+    display:flex;
+    justify-content: center;
+    width: 100%;
+}
+
+input {
+    background: black;
+    border: 1px solid green;
+    margin-top:.5rem;
+    padding: .5rem;
+    color: green;
+    
+ }
+
+ button{
+    color:green;
+    background-color: black;
+    border-style: solid;
+    border:1%;
+    border-color: green;
+    padding:1%;
+    float:left;
+    
+ }
+
+ button:hover{
+    color:black;
+    background-color: green;
+    cursor: pointer;
+ }

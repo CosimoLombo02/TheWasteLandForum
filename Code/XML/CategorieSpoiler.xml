@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE CategorieSpoiler SYSTEM "DTD\categorieSpoilerDTD.dtd">
+<CategorieSpoiler>
+<CategoriaSpoiler>
+<nome>Spoiler della trama</nome>
+</CategoriaSpoiler>
+<CategoriaSpoiler>
+<nome>Spoiler delle meccaniche di gioco</nome>
+</CategoriaSpoiler>
+<CategoriaSpoiler>
+<nome>Spoiler inserito generico</nome>
+<utenteCreatore>Ciao123</utenteCreatore>
+<dataInserimento>2024-07-07</dataInserimento>
+</CategoriaSpoiler>
+</CategorieSpoiler>

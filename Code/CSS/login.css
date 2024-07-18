@@ -1,0 +1,56 @@
+
+    input {
+        background: black;
+        border: 1px solid green;
+        margin-top:.5rem;
+        padding: .5rem;
+        color: green;
+        
+     }
+
+     button{
+        color:green;
+        background-color: black;
+        border-style: solid;
+        border:1%;
+        border-color: green;
+        padding:1%;
+        float:left;
+        
+     }
+
+     button:hover{
+        color:black;
+        background-color: green;
+        cursor: pointer;
+     }
+
+     div.containerLogin {
+        display: flex;
+        justify-content: center;
+        
+      }
+
+      a.customLink{
+        text-decoration: underline;
+        text-decoration-color: green;
+        color:green;
+      }
+
+      a.customLink::after{
+        color:green;
+      }
+
+      a.customLink::before{
+        color:green;
+      }
+
+      a.customLink:hover{
+        color:yellow;
+        text-decoration-color: yellow;
+      }
+
+      #b1{
+        float:right;
+      }
+

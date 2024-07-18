@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ConseguenzeSegnalazioni SYSTEM "DTD\conseguenzeSegnalazioniDTD.dtd">
+<ConseguenzeSegnalazioni>
+<ConseguenzaSegnalazioni>
+<codiceSegnalazione></codiceSegnalazione>
+<testoWarning></testoWarning>
+<versoChi></versoChi>
+<descrizioneConseguenza></descrizioneConseguenza>
+<dataEvasioneSegnalazione></dataEvasioneSegnalazione>
+<utenteGestore></utenteGestore>
+</ConseguenzaSegnalazioni>
+</ConseguenzeSegnalazioni>
