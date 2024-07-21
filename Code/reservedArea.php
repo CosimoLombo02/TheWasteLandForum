@@ -10,27 +10,23 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <title>Area Riservata</title>
     <link rel ="stylesheet" href="CSS/login.css" type = "text/css" />
     <link rel="icon" type="image/x-icon" href="ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
-    <link href='https://fonts.googleapis.com/css?family=Share Tech Mono' rel='stylesheet'/> <!--font di usato nei terminali presenti in Fallout-->
-    <style type="text/css">
-        body {
-            font-family: 'Share Tech Mono';font-size: 22px;
-            background-color: black;
-            color:green;
-        }
-    </style></head>
+    
+    </head>
 <body>
     <div class="containerLogin">
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="post">
+        <form action="reservedArea.php" method="post">
             
             <p >Username:</p>
-            <input class="input" type="text" name="username" />
-            <p>Password:</p>
-            <input class="input" type="password" name="password" />
+            <p><input class="input" type="text" name="username" /></p>
             
-            <button  type ="submit">Accedi</button>
+            <p>Password</p>
+            <p><input class="input" type="password" name="password" />
+            
+            <button  type ="submit">Accedi</button></p>
             
             
-            <p>Non registrato?</p>
+            
+            <div><p>Non registrato?</p></div>
             <p><a class="customLink" href="registrazioneUtente.php">Clicca qui!</a></p>
         </form>
         
@@ -67,7 +63,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
             header("Location: Admin.php");
 
         }else{ //qualsiasi altro utente presente nel sistema
-            echo "Accesso  riuscito  <br />";
+            echo "Accesso  riuscito  <br />";//debug
             session_start();
             $_SESSION['username'] = $nome_utente;
             $_SESSION['password'] = $passmd5;

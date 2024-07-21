@@ -1,5 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title> Registrazione Utente</title> 
+    <!--<link rel="stylesheet" href="foglioDiStile.css " type="text/css" /></head>-->
+    <link rel ="stylesheet" href="CSS/stileRegUtente.css" type = "text/css" />
+    <link rel="icon" type="image/x-icon" href="ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
+    
+    
+</head>
+
+<body><div><h1>Inserisci i tuoi dati!</h1></div>
 <?php
+
+require "connection.php";
+
+//pattern per la regex per la password
+$pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno un carattere,almeno 1 carattere speciale
+                                                                //almeno una lettera maiuscola ed almeno un numero
+
 
  if(isset($_POST['password']))
  $passw =$_POST['password'];
@@ -15,156 +37,170 @@
  else $email="";
 
 
+ //accessori uploader file
+ if(isset($_FILES['avatar'])){
+    $target_dir = "Avatar/"; //directory target per gli avatar
+    $target_file = $target_dir . basename($_FILES['avatar']['name']);
+    $nomeFileAvatar = basename($_FILES["avatar"]["name"]);
+    $uploadOk = 1;
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION)); //tipo del file
+ }
 
 
 
-        if(isset($_POST['r'])){
-            if(!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['passwordC']) && !empty($_POST['email'])){
-                $passw = $_POST['password'];
-                $pass1 = $_POST['passwordC'];
-                $email=$_POST['email'];
-                $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno un carattere,almeno 1 carattere speciale
-                                                                //almeno una lettera maiuscola ed almeno un numero
-                
-                $pattern_mail ='/^[A-z0-9\.\+_-]+@[A-z0-9\._-]+\.[A-z]{2,6}$/'; //questa regex serve per controllare che la mail
-                                                                                //sia effettivamente una mail
-         //ricordarsi di if wrapper per controllare presenza mail nel db
-         //pregmatch mail se ok, entro e verifico le altre cose
-         if(preg_match($pattern_mail,$email)){
-                if(!preg_match($pattern, $passw)){
-                    echo "<div ><p>Attenzione!La password deve avere almeno un carattere speciale(! @ # $ % ^ & * -),almeno 1 carattere maiuscolo,almeno un numero ed almeno 8 caratteri!</p></div>";
-                    $passw ="";
-                    $pass1 = "";
-                    $username=$_POST['username'];
-                }else{
-                    if($passw != $pass1){
-                        echo "<div><p>Attenzione!Le Password non corrispondono!</p></div>";
-                        $passw ="";
-                        $pass1 = "";
-                    }else{
-                        //se sono qui posso inserire nel database l'utente
-                        $username=$_POST['username'];
-                        $passw=md5($_POST['password']); 
-                        $email = $_POST['email'];
+ //controlliamo le azioni svolte dall'utente
+ if(isset($_POST['r'])){
+    if(empty($_POST['username'])){
+        echo "<div><p>Attenzione! Inserire username!</p></div>";
 
-                        require_once "connection.php";
-                        
-                        /*Abbiamo inserito questo costrutto try catch per poter gestire al meglio l'eventualità che quel 
-                        nome utente sia già presente nel db, se $result === false allora verra' lanciata e gestita un'eccezzione
-                        di tipo mysqli_sql_exception */
-                        try{$sql="insert into utenti(username,password,ruolo) values('$username','$passw',2)";
-                            $result = mysqli_query($conn,$sql);
-                            if($result){
-                                session_start();
-                                    $_SESSION['username']=$username;
-                                    $_SESSION['password']=$pass;
-                                       header("Location:homepage.php");
-    
-                            }else{throw new mysqli_sql_exception;} //istruzione "paranoica" per chi non ha la gestione delle eccezioni attiva
-                                
-
-                        }catch(mysqli_sql_exception $e){
-
-                            echo "<div class='center'><p class='para'>Attenzione!Cambiare username</p></div>";
-                            $passw=$_POST['password'];
-                            $pass1=$_POST['passwordC'];
-                            $username="";
-
-                        }//end catch
-
-                    }//end else password
-                }//end pregmatch pass 
-            }else{
-                //regex falita
-                echo "<div ><p>Attenzione!Inserire una mail valida</p></div>";
-            } 
+    }else{
+        //$username=$_POST['username'];
+        //controllo che lo username non sia presente nel db
+        $userTemp = $_POST['username'];
+        $sql = "select u.nomeUtente from utenti u where u.nomeUtente='$userTemp'";
+        $result = mysqli_query($conn, $sql); //query
+        if(mysqli_num_rows($result)==1){
+            echo "<div><p>Nome utente già presente nel sistema</p></div>";
+            $username="";
         }else{
-            if(empty($_POST['password']) && empty($_POST['username']) && empty($_POST['passwordC'])){
-                echo "<div ><p>Inserire i dati!</p></div>";
-                $passw="";
-                $username="";
-                $username = "";
-            } 
-            if(empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['passwordC'])){
-                echo "<div><p >Inserire Username!</p></div>";
-                $passw=$_POST['password'];
-                $pass1=$_POST['passwordC'];
-                
-            } 
-            if(empty($_POST['password'])){
-                echo "<div><p>Inserire Password!</p></div>";
-                $pass1="";
-                $username=$_POST['username'];
-            } 
-            if(!empty($_POST['password']) && empty($_POST['passwordC'])){
-                echo "<div><p>Inserire conferma Password!</p></div>";
-                $passw=$_POST['password'];
-                $username=$_POST['username'];
-            } 
+            $username = $userTemp; //setto l'username
+            if(!empty($_POST['email'])){
+                $emailTemp = $_POST['email'];
+                if(filter_var($emailTemp, FILTER_VALIDATE_EMAIL)){ //usiamo questa funzione per vedere se la mail è well-formed
+                    $sql = "select u.email from utenti u where u.email = '$emailTemp'";
+                    $result = mysqli_query($conn, $sql);
+                    if(mysqli_num_rows($result) == 1){
+                       echo "<div><p>Attenzione!Email già presente nel sistema</p></div>";
+                       $email = "";
+                    }else{
+                        $email = $emailTemp; //setto la mail
+                        if(!empty($_POST['password'])){
+                            $pT = $_POST['password'];
+                            if(preg_match($pattern,$pT)){ //controllo che la password rispetti il pattern
+                                if(!empty($_POST['passwordC'])){
+                                    $pass1 = $_POST['passwordC']; 
+                                    if($pass1 == $pT){
+                                        $passw = $pT; //setto la password
 
-            
-        }//end else pregmatch pass
-    
-    
-    }//end if isset r
-        
-    
+                                        //se sono qui posso allora procedere con l'avatar
+                                        //entra in gioco l'image uploader
+                                        if(!empty($_FILES['avatar']['tmp_name'])){ //controllo che l'utente abbia inserito il file
+                                            
+                                            // verifica che il file sia effettivamente un immagine o un fake
+                                            $check = getimagesize($_FILES["avatar"]["tmp_name"]);
+                                            if($check){
+                                                //se sono qui, il file è probabilmente un'immagine, per sicurezza controllo la sua estensione
+                                                // Vengono ammessi solo jpeg, png 
+                                                if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                                                        echo "<div><p>Attenzione! Sono ammessi solo JPG o PNG o JPEG!</p></div>";
+                                                        //$uploadOk = 0;
+                                                }else{
+                                                    //se sono qui l'estensione va bene
+                                                    //ora posso inserire l'utente e caricare il file nel sistema
+                                                    //move_uploaded_file($_FILES["avatar"]["tmp_name"], $target_file)
+                                                    if(copy($_FILES["avatar"]["tmp_name"],$target_file)){
+                                                        $md5passw=md5($passw); //la password viene criptata con md5
+
+                                                        //ora posso procedere ad inserire l'utente nel database
+                                                        $sql = "insert into utenti(nomeUtente,email,password,livelloReputazione,nomeFileAvatar,ruolo,ban) values('$username','$email','$md5passw',0,'$nomeFileAvatar',0,0)";
+                                                        $result = mysqli_query($conn, $sql);
+                                                        if($result){
+                                                            //echo "<div><p>Creazione pagina personale ancora da implementare...</p></div>";
+                                                            session_start();
+                                                            $_SESSION['username'] = $username;
+                                                            $_SESSION['password'] = $passw;
+                                                    
+                                                            require_once "creaPaginaUtente.php";
+                                                            
+                                                        }else{
+
+                                                            die("Errore nell'inserimento dell'utente");
+
+                                                        }//end else inserimento utente
+
+                                                    }else{
+                                                        echo "<div><p>Errore nell'upload del file!</p></div>";
+                                                    }
+
+                                                }//end else controllo estensione
+
+                                            }else{
+                                                echo "<div><p>Attenzione! Inserire un file immagine!</p></div>";
+                                                  
+                                            }//end else check
+                                            
+                                        }else{
+                                            echo "<div><p>Attenzione! Inserire un immagine avatar!</p></div>";
+                                        }// end else empty avatar
+                                        
+                                    }else{
+                                        echo "<div><p>Le password non corrispondono!</p></div>";
+                                        $pass1="";
+                                        
+
+                                    }//end else == password
+
+                                }else{
+                                    echo "<div><p>Attenzione!Inserire la conferma della password</p></div>";
+
+                                }//end else conferma
+
+                            }else{
+                                echo "<div><p>Attenzione!La password deve avere almeno 8 caratteri, di cui almeno 1 maiuscolo, 1 speciale((! @ # $ % ^ & * -)) ed almeno un numero</p></div>";
+                                $passw="";
+                                $pass1="";
+                            }//end pregmatch password
+
+                        }else{
+                            echo "<div><p>Attenzione!Inserire la password</p></div>";
+
+                        }//end empty isset password
+                    }//end else email presente sistema
+
+                }else{
+                    echo "<div><p>Attenzione!Inserire una mail valida !</p></div>";
+                    $_POST['email']="";
+
+                }//end else validazione mail
+
+            }else{
+                echo "<div><p>Attenzione! Inserire email!</p></div>";
+
+            }// end else empty email
+
+        }//end else query username
+
+
+    }//end else isset username
+
+ }//end if isset r
+
+
 ?>
 
-
-
-
-
-
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
-
-<head>
-    <title> Registrazione Utente</title> 
-    <!--<link rel="stylesheet" href="foglioDiStile.css " type="text/css" /></head>-->
-    <link rel ="stylesheet" href="CSS/stileRegUtente.css" type = "text/css" />
-    <link rel="icon" type="image/x-icon" href="ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
-    <link href='https://fonts.googleapis.com/css?family=Share Tech Mono' rel='stylesheet'/> <!--font di usato nei terminali presenti in Fallout-->
-    <style type="text/css">
-        body {
-            font-family: 'Share Tech Mono';font-size: 22px;
-            background-color: black;
-            color:green;
-        }
-    </style>
-</head>
-<body>
-    <div><h1>Inserisci i tuoi dati!</h1></div>
-    <div>
+    <div >
+       <form action="registrazioneUtente.php" method = "post" enctype="multipart/form-data">
         
-        <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method = "post">
-        <label>Nome Utente: </label> <br />  
-        <input class="input" type="text" name = "username" size="100" value="<?php echo $username?>" /> <br /><br />
-        <label>Email: </label> <br />  
-        <input class="input" type="text" name = "email" size="100" value="<?php echo $email?>" /> <br /><br />
-        <label>Password: </label><br />
-        <input  class="input" type = "password" name = "password" size = "100" value="<?php echo $passw?>"><br /><br />
-        <label>Conferma password: </label><br />
-        <input class="input" type = "password" name = "passwordC" size = "100" value="<?php echo $pass1?>">
-        <div><label>Avatar: </label>
-        <input class="input" type = "file" name = "avatar" id = "avatar" value = "immagine avatar"/>
+        <p>Nome Utente:  </p>  
+        <p><input class="input" type="text" name = "username" size="100" value="<?php echo $username?>" /> </p>
+        <p>Email: </p> 
+        <p><input class="input" type="text" name = "email" size="100" value="<?php echo $email?>" /> </p>
+        <p>Password: </p>
+        <p><input  class="input" type = "password" name = "password" size = "100" value="<?php echo $passw?>" /></p>
+        <p>Conferma password: </p>
+        <p><input class="input" type = "password" name = "passwordC" size = "100" value="<?php echo $pass1?>" /></p>
+        
+        <div><p>Avatar: </p>
+        <input class="input" type = "file" name = "avatar" id = "avatar" />
         </div>
         <div>
-        <button class="input" type = "submit" size = "100"  name ="r">Registrati</button>
+        <button class="input" type = "submit" name ="r">Registrati</button>
         <button class="input" type = "reset" >Annulla</button>
         </div>
         
         
         </form>
     </div>
-
-    
-
-    
 
 
 </body>

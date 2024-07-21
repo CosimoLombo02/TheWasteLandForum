@@ -5,9 +5,6 @@ session_start();
      
 ?>
 
-
-
-
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -19,13 +16,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <title> Fallout 1</title> 
     <link rel ="stylesheet" href="CSS/stilePagLore.css" type = "text/css" />
     <link rel="icon" type="image/x-icon" href="ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
-    <link href='https://fonts.googleapis.com/css?family=Share Tech Mono' rel='stylesheet'/> <!--font di usato nei terminali presenti in Fallout-->
-    <style type="text/css">
-        body {
-            font-family: 'Share Tech Mono';font-size: 22px;
-            background-color: black;
-        }
-    </style>
+    
 </head>
 <body>
     <!--i link cambiano a seconda se si è loggati o meno
