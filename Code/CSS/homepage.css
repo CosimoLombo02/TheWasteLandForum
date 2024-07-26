@@ -59,5 +59,23 @@ div.topnav {
     width: 50%;
     margin:0 auto;
   }
+
+  /*questi due button fanno riferimento alla homepage del forum*/
+  button{
+    color:green;
+    background-color: black;
+    border-style: solid;
+    border:1%;
+    border-color: green;
+    padding:1%;
+    float:left;
+    
+ }
+
+ button:hover{
+    color:black;
+    background-color: green;
+    cursor: pointer;
+ }
   
   

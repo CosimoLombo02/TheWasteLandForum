@@ -6,10 +6,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
     <title> Registrazione Utente</title> 
-    <!--<link rel="stylesheet" href="foglioDiStile.css " type="text/css" /></head>-->
     <link rel ="stylesheet" href="CSS/stileRegUtente.css" type = "text/css" />
     <link rel="icon" type="image/x-icon" href="ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
-    
+    <script type="text/javascript" src="JS/anteprima.js"></script> <!--questo piccolo script serve per far vedere all'utente
+                                                                    un anteprima dell'immagine che carica come avatar-->
     
 </head>
 
@@ -57,7 +57,7 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
         //$username=$_POST['username'];
         //controllo che lo username non sia presente nel db
         $userTemp = $_POST['username'];
-        $sql = "select u.nomeUtente from utenti u where u.nomeUtente='$userTemp'";
+        $sql = "select u.nomeUtente from utenti u where strcmp(u.nomeUtente,'$userTemp')=0";
         $result = mysqli_query($conn, $sql); //query
         if(mysqli_num_rows($result)==1){
             echo "<div><p>Nome utente già presente nel sistema</p></div>";
@@ -67,7 +67,7 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
             if(!empty($_POST['email'])){
                 $emailTemp = $_POST['email'];
                 if(filter_var($emailTemp, FILTER_VALIDATE_EMAIL)){ //usiamo questa funzione per vedere se la mail è well-formed
-                    $sql = "select u.email from utenti u where u.email = '$emailTemp'";
+                    $sql = "select u.email from utenti u where strcmp(u.email,'$emailTemp')=0";
                     $result = mysqli_query($conn, $sql);
                     if(mysqli_num_rows($result) == 1){
                        echo "<div><p>Attenzione!Email già presente nel sistema</p></div>";
@@ -110,7 +110,7 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
                                                             $_SESSION['username'] = $username;
                                                             $_SESSION['password'] = $passw;
                                                     
-                                                            require_once "creaPaginaUtente.php";
+                                                            header("Location: Forum/forumHP.php");
                                                             
                                                         }else{
 
@@ -193,14 +193,18 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
         <div><p>Avatar: </p>
         <input class="input" type = "file" name = "avatar" id = "avatar" />
         </div>
+        <div id="anteprima"></div>
         <div>
         <button class="input" type = "submit" name ="r">Registrati</button>
-        <button class="input" type = "reset" >Annulla</button>
+        <button class="input" type = "reset" onclick="window.location.reload();" >Annulla</button>
         </div>
+        
         
         
         </form>
     </div>
+    
+    
 
 
 </body>

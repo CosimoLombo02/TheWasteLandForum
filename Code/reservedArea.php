@@ -28,9 +28,16 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             
             <div><p>Non registrato?</p></div>
             <p><a class="customLink" href="registrazioneUtente.php">Clicca qui!</a></p>
+            
         </form>
         
     </div>
+    <div class="containerLogin"><p><a class="customLink" href="homepage.php">Homepage sito </a></p><p>|</p>
+    <p><a class="customLink" href="Forum/forumHP.php">Homepage Forum </a></p>
+    
+    
+    </div>
+    
     
     
 
@@ -60,15 +67,14 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
             session_start();
             $_SESSION['username'] = $nome_utente;
             $_SESSION['password'] = $passmd5;
-            header("Location: Admin.php");
+            header("Location: Admin.php"); //l'admin viene automaticamente reindirizzato alla sua bacheca personale
 
         }else{ //qualsiasi altro utente presente nel sistema
             echo "Accesso  riuscito  <br />";//debug
             session_start();
             $_SESSION['username'] = $nome_utente;
             $_SESSION['password'] = $passmd5;
-            //header("Location: homepage.php"); da modificare, dovrei essere reindirizzato o alla prima pagina del forum
-            // o alla pagina personale dell'utente, da decidere
+            header("Location: Forum/forumHP.php"); //tutti gli altri utenti invece vengono reindirizzati alla pagina principale del forum
         }
 
     } else {
