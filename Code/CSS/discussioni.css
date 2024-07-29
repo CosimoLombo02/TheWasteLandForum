@@ -56,7 +56,7 @@ div.topnav {
     float: left;
     color: green;
     text-align: center;
-    padding: 12px 14px;
+    padding: 12px 12px;
     text-decoration: none;
     font-size: 17px;
     font-family: 'Share Tech Mono';
@@ -75,3 +75,131 @@ div.topnav {
     background-color: black;
     color: yellow;
   }
+
+  div.container {
+    display: flex;
+    justify-content: center;
+  }
+
+  button{
+    color:green;
+    background-color: black;
+    border-style: solid;
+    border:1%;
+    border-color: green;
+    padding:1%;
+    float:left;
+    font-size:25px;
+    margin: 2%;
+    
+ }
+
+ button:hover{
+    color:black;
+    background-color: green;
+    cursor: pointer;
+ }
+
+ select.selectCustom{
+    color:green;
+    background-color: black;
+    border-style: solid;
+    border-color:green;
+    font-size:22.5px;
+ }
+
+ input {
+    background: black;
+    border: 1px solid green;
+    margin-top:.5rem;
+    padding: .5rem;
+    color: green;
+    font-size:x-large;
+    
+ }
+
+ input:hover{
+    color:black;
+    background-color: green;
+    cursor: pointer;
+ }
+
+ optgroup{
+    font-style: normal;
+ }
+
+ div.colonnaGrandeScroll{
+    overflow-y: scroll;
+    float : left;
+  width : 95%;
+  margin-left : 2%;
+   margin-right: 2%;
+  color : green;
+  position:flex;
+  border-style: solid;
+  border-color: green;
+  max-height: 600px;
+  
+  }
+
+  hr{
+    color:green;
+  }
+
+  p.evidenzia{
+    color:yellow;
+  }
+
+  h3{
+    color:yellow;
+  }
+
+  div.containerTitolo{
+    display:flex;
+    justify-content: left;
+  }
+  
+  .buttonF{
+    border-style:none;
+    margin:0%;
+    font-family: 'Share Tech Mono',sans-serif; font-size:  40px;
+    padding:0%
+    
+  }
+  
+  div.colonnaGrande {
+    width: 50%; 
+  padding: 4%;
+  box-sizing: border-box;
+  border: 1px solid green;
+ border-left-style: none;
+ border-right-style: none;
+  } 
+
+
+
+div.containerP{
+display:flex;
+justify-content: space-between;
+} 
+
+div.sottoCategoriaCustom{
+    display:none;
+}
+
+div.colonnaGrandeC {
+    width: 50%; 
+  padding: 4%;
+  box-sizing: border-box;
+  border: 1px solid green;
+   border-right-style: none;
+  
+  }  
+ div.colonnaGrandeCR{
+    width: 50%; 
+  padding: 4%;
+  box-sizing: border-box;
+  border: 1px solid green;
+   border-left-style: none;
+  
+  }  

@@ -61,7 +61,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 <option value="FalloutNewVegas" <?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutNewVegas") echo 'selected="selected"';?>>Fallout New Vegas</option>
                 <option value="FalloutSerieTv"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutSerieTv") echo 'selected="selected"';?>>Fallout Serie Tv</option>
             </select>
-            
             <select name="sottocategorie" class="selectCustom">
             <optgroup label="Personaggi e Luoghi">
                 <?php
@@ -167,7 +166,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                $conta =0; //questo contatore mi serve per vedere se esistono discussioni con quel media, quella categoria e quella determinata sotto categoria
                foreach ($discussioni as $discussione) {
                 //controlliamo che la discussione sia coerente con il media, la categoria e la sottocategoria inserita dall'utente, inoltre essa deve essere attiva in termini di stato
-                if($discussione->getElementsByTagName('MediaDiRiferimento')->item(0)->textContent==$_POST['Media'] && $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue==$catRif && $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue==$sottoC && $discussione->getElementsByTagName('statoDiscussione')->item(0)->nodeValue=="attiva" ){
+                if($discussione->firstChild->nextSibling->nextSibling->nextSibling->nextSibling->textContent==$_POST['Media'] && $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue==$catRif && $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue==$sottoC && $discussione->getElementsByTagName('statoDiscussione')->item(0)->nodeValue=="attiva" ){
                     $conta++;
                     echo "<div class='containerP'>"; //questo div è il contenitore principale
                     echo "<div class='colonnaGrande'>"; //container1
@@ -175,7 +174,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                     echo "<div class='containerTitolo'><button class='buttonF' type='submit'>".$discussione->firstChild->nextSibling->textContent."</button>"; //titolo
                     echo "<input type='hidden' name='codDiscussione' value='".$discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue."'/></div>";
                     echo "</form>";
-                    echo "<p>Tipo : ".$discussione->getElementsByTagName('tipoDiscussione')->item(0)->nodeValue."</p>";
                     echo "<p>Creata da: ".$discussione->getElementsByTagName('nomeUtenteCreatoreDiscussione')->item(0)->nodeValue."</p>";
                     echo "<p>Data Creazione: ".$discussione->getElementsByTagName('dataCreazioneD')->item(0)->nodeValue."</p>";
                     if($discussione->getElementsByTagName('CategoriaSpoiler')->length==0){ //significa che la recensione non ha spoiler
@@ -253,7 +251,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                }//end foreach
 
                if($conta==0){
-                //Se entro qui significa che non ho trovato nessuna recensione con questi dati
                 echo "<div><h1>Nessuna discussione presente con questi dati</h1></div>";
                }
             

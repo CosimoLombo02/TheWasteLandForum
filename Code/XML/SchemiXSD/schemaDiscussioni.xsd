@@ -14,6 +14,7 @@
       <xsd:sequence>
          <xsd:element ref="codiceDiscussione" minOccurs="1" maxOccurs="1" />
          <xsd:element ref="Titolo" minOccurs="1" maxOccurs="1" />
+         <xsd:element ref="tipoDiscussione" minOccurs="1" maxOccurs="1" />
          <xsd:element ref="dataCreazioneD" minOccurs="1" maxOccurs="1"  />
          <xsd:element ref="nomeUtenteCreatoreDiscussione" minOccurs="1" maxOccurs="1" />
          <xsd:element ref="MediaDiRiferimento" minOccurs="1" maxOccurs="1" />
@@ -36,6 +37,8 @@
 <xsd:element name="codiceDiscussione" type="xsd:string" />
 
 <xsd:element name="Titolo" type="xsd:string" />
+
+<xsd:element name="tipoDiscussione" type="xsd:string" />
 
 <xsd:element name="dataCreazioneD" type="xsd:date"  />
 
