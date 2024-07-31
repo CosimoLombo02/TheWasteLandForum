@@ -138,7 +138,7 @@ div.topnav {
   position:flex;
   border-style: solid;
   border-color: green;
-  max-height: 600px;
+ max-height: 400px;
   
   }
 
@@ -176,6 +176,17 @@ div.topnav {
  border-right-style: none;
   } 
 
+   
+  div.colonnaGrandeD {
+    width: 50%; 
+  padding: 4%;
+  overflow:auto;
+  box-sizing: border-box;
+  border: 1px solid green;
+ border-left-style: none;
+ border-right-style: none;
+  } 
+
 
 
 div.containerP{
@@ -203,3 +214,32 @@ div.colonnaGrandeC {
    border-left-style: none;
   
   }  
+
+  textarea{
+    border-style:solid;
+    border-color:green;
+    background-color: black;
+    font-size:medium;
+    color:green;
+  }
+
+  textarea:hover{
+    border-color:yellow;
+  }
+
+  form.form1{
+    display:flex;
+    
+    width:100%;
+  }
+
+  div.colonnaGrandeD {
+    width: 50%; 
+  padding: 4%;
+  overflow-y:auto;
+  overflow-x:auto;
+  box-sizing: border-box;
+  border: 1px solid green;
+ border-left-style: none;
+ border-right-style: none;
+  } 

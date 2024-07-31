@@ -170,7 +170,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 if($discussione->getElementsByTagName('MediaDiRiferimento')->item(0)->textContent==$_POST['Media'] && $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue==$catRif && $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue==$sottoC && $discussione->getElementsByTagName('statoDiscussione')->item(0)->nodeValue=="attiva" ){
                     $conta++;
                     echo "<div class='containerP'>"; //questo div è il contenitore principale
-                    echo "<div class='colonnaGrande'>"; //container1
+                    echo "<div class='colonnaGrandeD'>"; //container1
                     echo "<form action='reindirizza.php' method='post'>";
                     echo "<div class='containerTitolo'><button class='buttonF' type='submit'>".$discussione->firstChild->nextSibling->textContent."</button>"; //titolo
                     echo "<input type='hidden' name='codDiscussione' value='".$discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue."'/></div>";
@@ -194,9 +194,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
                     }//end else spoiler
 
-                    $string = nl2br($discussione->getElementsByTagName('Descrizione')->item(0)->nodeValue);
-                     echo "<p class='evidenzia'>".$string."</p>";
-                     echo "</div>"; //qui chiudo container1
+                    
                      
 
                     $cond1 =  $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0)->childElementCount;
@@ -207,7 +205,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                        
                         $codice = $discussione->firstChild->nodeValue;
                         $media = mediaValutazioni($codice,'valutazioniDiscussioneSpoiler');
-                        echo "<div class='colonnaGrande'>";
+                       
                         echo "<h3>Ecco cosa ne pensano gli utenti: </h3>";
                         if($media!=0){
                         echo "<p>Media Valutazioni Spoiler:";
@@ -238,11 +236,21 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                     echo "</p>";}
 
                     }else{
-                        echo "<div class='colonnaGrande'><p>Nessuna valutazione</p></div>";
+                        echo "<p>Nessuna valutazione</p>";
                     }//end else cond
 
                     
-                    echo "</div>"; //div container 2
+                    
+                     
+
+                    echo "</div>"; //div container 1
+                    echo "<div class='colonnaGrandeD'><p>Descrizione: </p>";
+                    $string = nl2br($discussione->getElementsByTagName('Descrizione')->item(0)->nodeValue);
+                     echo "<p class='evidenzia'>".$string."</p></div>";
+
+
+
+
                     //echo "<hr />";
                     echo "</div>"; //div sezione principale
                     

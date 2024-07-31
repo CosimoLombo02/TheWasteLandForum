@@ -1,15 +1,3 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE CategorieSpoiler SYSTEM "DTD\categorieSpoilerDTD.dtd">
-<CategorieSpoiler>
-<CategoriaSpoiler>
-<nome>Spoiler della trama</nome>
-</CategoriaSpoiler>
-<CategoriaSpoiler>
-<nome>Spoiler delle meccaniche di gioco</nome>
-</CategoriaSpoiler>
-<CategoriaSpoiler>
-<nome>Spoiler inserito generico</nome>
-<utenteCreatore>Ciao123</utenteCreatore>
-<dataInserimento>2024-07-07</dataInserimento>
-</CategoriaSpoiler>
-</CategorieSpoiler>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE CategorieSpoiler SYSTEM "../XML/DTD/categorieSpoilerDTD.dtd">
+<CategorieSpoiler><CategoriaSpoiler><nome>Spoiler della trama</nome></CategoriaSpoiler><CategoriaSpoiler><nome>Spoiler delle meccaniche di gioco</nome></CategoriaSpoiler><CategoriaSpoiler><nome>Spoiler inserito generico</nome><utenteCreatore>Ciao123</utenteCreatore><dataInserimento>2024-07-07</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>test</nome><utenteCreatore>test</utenteCreatore><dataInserimento>2024-07-30</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>gg</nome><utenteCreatore>admin</utenteCreatore><dataInserimento>2024-07-30</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>ciao</nome><utenteCreatore>Cosimo02</utenteCreatore><dataInserimento>2024-07-31</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>f</nome><utenteCreatore>admin</utenteCreatore><dataInserimento>2024-07-31</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>fff</nome><utenteCreatore>admin</utenteCreatore><dataInserimento>2024-07-31</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>ffff</nome><utenteCreatore>admin</utenteCreatore><dataInserimento>2024-07-31</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>ff</nome><utenteCreatore>admin</utenteCreatore><dataInserimento>2024-07-31</dataInserimento></CategoriaSpoiler><CategoriaSpoiler><nome>fffff</nome><utenteCreatore>admin</utenteCreatore><dataInserimento>2024-07-31</dataInserimento></CategoriaSpoiler></CategorieSpoiler>
