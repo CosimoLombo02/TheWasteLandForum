@@ -1,12 +1,24 @@
-// mostra il popup dopo 2000 millisecondi (2secondi)
-setTimeout(
-    function() {
-    	console.log("run");
-      document.getElementById('pop').style.display="block"	;
-   	}, 2000);
 
-
-// chiudi il popup quando clicchi sulla X
-document.getElementById("close").onclick = function(e){
-    document.getElementById('pop').style.display="none";
+function openPopup() {
+    document.getElementById("overlay").style.display = "block"; // Mostra l'overlay
+    document.getElementById("popup").style.display = "block";   // Mostra il popup
+    document.getElementById("popup").style.visibility = "visible";    // Mostra il popup
 }
+
+
+function closePopup() {
+    document.getElementById("overlay").style.display = "none";  // Nascondi l'overlay
+    document.getElementById("popup").style.display = "none";    // Nascondi il popup
+    document.getElementById("popup").style.visibility = "hidden";    // Nascondi il popup
+
+}
+
+
+document.getElementById("closePopup").addEventListener("click", closePopup);
+
+
+document.getElementById("overlay").addEventListener("click", closePopup);
+
+
+
+

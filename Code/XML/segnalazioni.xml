@@ -1,14 +1,2 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<segnalazioni>
-<segnalazione>
-<codiceSegnalazione></codiceSegnalazione>
-<utenteSegnalatore></utenteSegnalatore>
-<data></data>
-<codicePostSegnalato></codicePostSegnalato>
-<codiceDiscussione></codiceDiscussione>
-<motivazione></motivazione>
-<utenteCreatorePost></utenteCreatorePost>
-<stato></stato>
-<risaltoAdmin></risaltoAdmin>
-</segnalazione>
-</segnalazioni>
+<?xml version="1.0" encoding="UTF-8"?>
+<segnalazioni><segnalazione><codiceSegnalazione>1</codiceSegnalazione><utenteSegnalatore>testFile</utenteSegnalatore><data>2024-11-23</data><codicePostSegnalato>1</codicePostSegnalato><codiceDiscussione>1</codiceDiscussione><motivazione>linguaggioOff</motivazione><utenteCreatorePost>testBan</utenteCreatorePost><stato>in lavorazione</stato><risaltoAdmin>0</risaltoAdmin></segnalazione></segnalazioni>

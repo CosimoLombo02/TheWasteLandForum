@@ -1,0 +1,136 @@
+@import url('https://fonts.cdnfonts.com/css/share-tech-mono'); /*font usato nei terminali della saga*/
+  
+
+body {
+    font-family: 'Share Tech Mono',sans-serif; font-size:  22px;
+    background-color: black;
+    color:green;
+}
+
+div.topnav {
+    background-color: black;
+    overflow: hidden;
+    margin-left: 4.5%;
+    margin-right: 4.5%;
+    
+  }
+
+  .topnav a {
+    float: left;
+    color: green;
+    text-align: center;
+    padding: 12px 12px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Share Tech Mono';
+    background-color: black;
+    
+  }
+
+  /* cambia il colore quando si passa sopra con il mouse */
+.topnav a:hover {
+    background-color: green;
+    color: black;
+  }
+  
+  /* colora il link attivo */
+  .topnav a.active {
+    background-color: black;
+    color: yellow;
+  }
+
+  div.container {
+    display: flex;
+    justify-content: center;
+  }
+
+  /*serve per visualizzare le immagini profilo di ogni utente*/
+  img.immagineCornice{
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-style:solid;
+    border-color:green;
+    border-width: 5px;
+  }
+
+  td{
+    margin: 1px;
+    border-style:solid
+  }
+
+  input {
+    background: black;
+    border: 1px solid green;
+    margin-top:.5rem;
+    padding: .5rem;
+    color: green;
+    
+ }
+
+ input:hover{
+    color:black;
+    background-color: green;
+    cursor: pointer;
+ }
+
+ .button{
+    color:green;
+    background-color: black;
+    border-style: solid;
+    border:1%;
+    border-color: green;
+    padding:1%;
+   /* float:left;*/
+   display: inline-block;
+    
+ }
+
+ button:hover{
+    color:black;
+    background-color: green;
+    cursor: pointer;
+ }
+
+ div.colonnaGrandeIntera {
+    width: 100%; 
+  padding: 4%;
+  overflow:auto;
+  box-sizing: border-box;
+  border: 1px solid green;
+ border-left-style: none;
+ border-right-style: none;
+  } 
+
+  hr{
+    color:green;
+  }
+
+  div.colonnaGrandeScroll{
+    overflow-y: scroll;
+    float : left;
+  width : 95%;
+  margin-left : 2%;
+   margin-right: 2%;
+  color : green;
+  position:flex;
+  border-style: solid;
+  border-color: green;
+ max-height: 400px;}
+ div.containerTitolo{
+    display:flex;
+    justify-content: left;
+  }
+  
+  
+  .buttonF{
+    border-style:none;
+    margin:0%;
+    font-family: 'Share Tech Mono',sans-serif; font-size:  40px;
+    padding:0%;
+      background-color: black;
+    color:green;
+    
+  }
+  
+  

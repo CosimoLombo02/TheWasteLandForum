@@ -50,8 +50,9 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
 
  //controlliamo le azioni svolte dall'utente
  if(isset($_POST['r'])){
-    if(empty($_POST['username'])){
+    if(empty($_POST['username']) || trim($_POST['username'])==''){
         echo "<div><p>Attenzione! Inserire username!</p></div>";
+        $_POST['username']="";
 
     }else{
         //$username=$_POST['username'];
@@ -100,9 +101,10 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
                                                     //move_uploaded_file($_FILES["avatar"]["tmp_name"], $target_file)
                                                     if(copy($_FILES["avatar"]["tmp_name"],$target_file)){
                                                         $md5passw=md5($passw); //la password viene criptata con md5
+                                                        $usernameTrim = trim($username);
 
                                                         //ora posso procedere ad inserire l'utente nel database
-                                                        $sql = "insert into utenti(nomeUtente,email,password,livelloReputazione,nomeFileAvatar,ruolo,ban) values('$username','$email','$md5passw',0,'$nomeFileAvatar',0,0)";
+                                                        $sql = "insert into utenti(nomeUtente,email,password,livelloReputazione,nomeFileAvatar,ruolo,ban) values('$usernameTrim','$email','$md5passw',0,'$nomeFileAvatar',0,0)";
                                                         $result = mysqli_query($conn, $sql);
                                                         if($result){
                                                             //echo "<div><p>Creazione pagina personale ancora da implementare...</p></div>";
@@ -191,7 +193,7 @@ $pattern = '/^(?=.*[0-9])(?=.*[A-Z]).{8,20}$/'; //la password deve avere almeno 
         <p><input class="input" type = "password" name = "passwordC" size = "100" value="<?php echo $pass1?>" /></p>
         
         <div><p>Avatar: </p>
-        <input class="input" type = "file" name = "avatar" id = "avatar" />
+        <input class="input" type = "file" name = "avatar" id = "avatar" accept="image/*" />
         </div>
         <div id="anteprima"></div>
         <div>

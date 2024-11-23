@@ -88,8 +88,8 @@ Al completamento dell'espansione al giocatore verrà conferito il titolo di Cava
                         <span class="caption"> Incontro con sopravvissuti </span>
                       </div>
                       <div class="slide four">
-                        <img src="ImmaginiVideoSito/fallout76-4.avif" alt="Protectron" />
-                        <span class="caption"> Protectron </span>
+                        <img src="ImmaginiVideoSito/fallout76-6.jpg" alt="Bestia Ardente" />
+                        <span class="caption"> Bestia Ardente </span>
                       </div>
                       <div class="slide five">
                         <img src="ImmaginiVideoSito/fallout76-5.jpg" alt="Charleston" />

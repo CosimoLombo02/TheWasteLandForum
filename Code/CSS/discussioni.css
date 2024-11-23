@@ -163,7 +163,7 @@ div.topnav {
     border-style:none;
     margin:0%;
     font-family: 'Share Tech Mono',sans-serif; font-size:  40px;
-    padding:0%
+    padding:0%;
     
   }
   
@@ -219,7 +219,7 @@ div.colonnaGrandeC {
     border-style:solid;
     border-color:green;
     background-color: black;
-    font-size:medium;
+    font-size:90%;
     color:green;
   }
 

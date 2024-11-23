@@ -1,12 +1,3 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE ConseguenzeSegnalazioni SYSTEM "DTD\conseguenzeSegnalazioniDTD.dtd">
-<ConseguenzeSegnalazioni>
-<ConseguenzaSegnalazioni>
-<codiceSegnalazione></codiceSegnalazione>
-<testoWarning></testoWarning>
-<versoChi></versoChi>
-<descrizioneConseguenza></descrizioneConseguenza>
-<dataEvasioneSegnalazione></dataEvasioneSegnalazione>
-<utenteGestore></utenteGestore>
-</ConseguenzaSegnalazioni>
-</ConseguenzeSegnalazioni>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ConseguenzeSegnalazioni SYSTEM "../XML/DTD/conseguenzeSegnalazioniDTD.dtd">
+<ConseguenzeSegnalazioni><ConseguenzaSegnalazioni><codiceSegnalazione>1</codiceSegnalazione><testoWarning/><versoChi>test</versoChi><descrizioneConseguenza>-2</descrizioneConseguenza><dataEvasioneSegnalazione>2021-11-10</dataEvasioneSegnalazione><utenteGestore>test</utenteGestore></ConseguenzaSegnalazioni></ConseguenzeSegnalazioni>

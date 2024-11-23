@@ -20,6 +20,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <script type="text/javascript" src="../JS/controllaNumeroFile.js"></script>
     <script type="text/javascript" src="../JS/sparisciAnnulla.js"></script>
     <script type="text/javascript" src="../JS/funzioniGestioneRefresh.js"></script>
+    <script type="text/javascript" src="../JS/onchange.js"></script>
    
    
     
@@ -28,7 +29,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     
     <?php
     session_start();
-    var_dump($_POST);/*
+    //var_dump($_POST);/*
     
     
      if(!isset($_SESSION['username'])){
@@ -37,7 +38,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
          session_destroy(); //distruggo la sessione e reindirizzo alla pagina di login
          setcookie("PHPSESSID",'',time()-1,'/'); //cosi viene eliminato anche il cookie lato client
          header("Location: ../reservedArea.php");
-    }//end  */
+    }//end  
     $flag=false;
      
    
@@ -71,16 +72,20 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     if(isset($_POST['inserisci'])){ //controllo di provenire dal form
         if(empty($_POST['titolo']) || empty($_POST['primoPost']) || empty($_POST['descrizione'])){
             $check = false; 
-            echo "<p>1".$check."</p>";
+            //echo "<p>1".$check."</p>";
+         }
+         if(trim($_POST['titolo'])=='' || trim($_POST['primoPost'])=='' || trim($_POST['descrizione'])==''){
+            $check = false; 
+            //echo "<p>1".$check."</p>";
+            $_POST['titolo']='';
+            $_POST['descrizione']='';
+            $_POST['primoPost']='';
          }
 
-    
-     
-      
      if(isset($_POST['sottocategorie']) && $_POST['sottocategorie']=="altro"){
-        if(empty($_POST['Sottcategoria']) /*|| !isset($_POST['Sottocategoria'])*/){
+        if(empty($_POST['Sottcategoria']) || trim($_POST['Sottcategoria'])=='' /*|| !isset($_POST['Sottocategoria'])*/){
             $check = false;
-            echo "<p>2".$check."</p>";
+           // echo "<p>2".$check."</p>";
            // echo "<p>Sono qui</p>";
         }else{
             $check2 = true; //mi serve per dopo nella creazione della discussione nel file xml
@@ -144,9 +149,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     }//end if wrapper
 
         if(isset($_POST['categorieSpoiler']) && $_POST['categorieSpoiler']=="altroS"){
-            if(empty($_POST['categoriaSpoilerCustom']) || !isset($_POST['categoriaSpoilerCustom'])){
+            if(empty($_POST['categoriaSpoilerCustom']) || !isset($_POST['categoriaSpoilerCustom']) || trim($_POST['categoriaSpoilerCustom'])==''){
                 $check = false;
-                echo "<p>3".$check."</p>";
+                //echo "<p>3".$check."</p>";
             }else{
                 $check3 = true; //mi serve per dopo nella creazione della discussione nel file xml
                 //qui posso già inserire la categoria di spoiler nel file dedicato
@@ -232,7 +237,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
                 //titolo 
                 $ele1 = $doc->createElement('Titolo');
-                $ele1->nodeValue=$_POST['titolo'];
+                $ele1->nodeValue=trim($_POST['titolo']);
                 $r->appendChild($ele1);
 
                 //tipo
@@ -278,7 +283,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
                     //sottocategoria
                     $ele7 = $doc->createElement('Sottocategoria');
-                    $ele7->nodeValue=$_POST['Sottcategoria'];
+                    $ele7->nodeValue=trim($_POST['Sottcategoria']);
                     $r->appendChild($ele7);
 
                 }//end else check2
@@ -294,7 +299,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
                     }else{ //se invece sono qui l'utente ha inserito una categoria di spoiler nuova
                         $ele8 = $doc->createElement('CategoriaSpoiler');
-                        $ele8->nodeValue=$_POST['categoriaSpoilerCustom'];
+                        $ele8->nodeValue=trim($_POST['categoriaSpoilerCustom']);
                         $r->appendChild($ele8);
 
                     }//end else check3
@@ -457,14 +462,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 <option value="Fallout3" <?php if(isset($_POST['Media']) && $_POST['Media'] == "Fallout3") echo 'selected="selected"';?>>Fallout 3</option>
                 <option value="Fallout4"<?php if(isset($_POST['Media']) && $_POST['Media'] == "Fallout4") echo 'selected="selected"';?>>Fallout 4</option>
                 <option value="FalloutBOS"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutBOS") echo 'selected="selected"';?>>Fallout BOS</option>
-                <option value="FalloutTactics"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutTactics") echo 'selected="selected"';?>>Fallout Tatics</option>
+                <option value="FalloutTactics"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutTactics") echo 'selected="selected"';?>>Fallout Tactics</option>
                 <option value="FalloutNewVegas" <?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutNewVegas") echo 'selected="selected"';?>>Fallout New Vegas</option>
                 <option value="FalloutSerieTv"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutSerieTv") echo 'selected="selected"';?>>Fallout Serie Tv</option>
             </select>
             <p>Categoria e sottocategoria: </p>
 
-            <select name="sottocategorie" class="selectCustom">
-            <optgroup label="Personaggi e Luoghi" onclick="sparisci('sottoCategoriaCustom')">
+            <select name="sottocategorie" class="selectCustom" onchange="onchangeCustomSottocategoria()" >
+            <optgroup label="Personaggi e Luoghi" >
                 <?php
                 $string = 'sottoCategoriaCustom'; //serve per il div a scomparsa
                 $doc=caricaXML("sottocategorie.xml","");
@@ -483,7 +488,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 ?>
             
             </optgroup>
-            <optgroup label="Mods" onclick="sparisci('sottoCategoriaCustom')">
+            <optgroup label="Mods" >
             <?php
                 $doc=caricaXML("sottocategorie.xml","");
                 $sottoCategorie = $doc->getElementsByTagName('Sottocategoria');
@@ -501,7 +506,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 ?>
            
             </optgroup>
-            <optgroup label="Problemi Tecnici e Bugs" onclick="sparisci('sottoCategoriaCustom')">
+            <optgroup label="Problemi Tecnici e Bugs" >
             <?php
                 $doc=caricaXML("sottocategorie.xml","");
                 $sottoCategorie = $doc->getElementsByTagName('Sottocategoria');
@@ -519,7 +524,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 ?>
            
             </optgroup>
-            <optgroup label="Guide e Soluzioni" onclick="sparisci('sottoCategoriaCustom')">
+            <optgroup label="Guide e Soluzioni" >
                 
             <?php
                 $doc=caricaXML("sottocategorie.xml","");
@@ -540,7 +545,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             
                 
             </optgroup>
-            <option  value="altro" onclick="visibile('sottoCategoriaCustom')" <?php if(isset($_POST['sottocategorie']) && $_POST['sottocategorie'] == "altro") echo 'selected="selected"'?> >Altro</option>
+            <option  value="altro"  <?php if(isset($_POST['sottocategorie']) && $_POST['sottocategorie'] == "altro") echo 'selected="selected"'?> >Altro</option>
         </select>
         
         <div id="sottoCategoriaCustom" style="visibility:hidden" >
@@ -561,16 +566,16 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      </div><!--chiusura div1-->
      <div class="colonnaGrandeCR">
         <p>Presenza spoiler?</p>
-        <select name ="sp" class="selectCustom">
-        <option value="no" <?php if(isset($_POST['sp']) && $_POST['sp'] == "no") echo 'selected="selected"';?> onclick="sparisciSpeciale('spoiler','catSpoilerCustom')">No</option>
-        <option value="si" <?php if(isset($_POST['sp']) && $_POST['sp'] == "si") echo 'selected="selected"';?> onclick="visibile('spoiler')">Si</option>
+        <select name ="sp" class="selectCustom" onchange="onchangeSpoiler()">
         
+        <option value="si" <?php if(isset($_POST['sp']) && $_POST['sp'] == "si") echo 'selected="selected"';?> onclick="visibile('spoiler')">Si</option>
+        <option value="no" <?php if(isset($_POST['sp']) && $_POST['sp'] == "no") echo 'selected="selected"';?> onclick="sparisciSpeciale('spoiler','catSpoilerCustom')">No</option>
         </select>
 
-        <div id="spoiler" style="visibility:hidden">
+        <div id="spoiler" style="visibility:visible">
             <p>Categoria Spoiler: </p>
-            <select name ="categorieSpoiler"  class="selectCustom">
-                <optgroup label="Categorie di Spoiler" onclick="sparisci('catSpoilerCustom')">
+            <select name ="categorieSpoiler"  class="selectCustom" onchange="onchangeSpoilerCustom()">
+                <optgroup label="Categorie di Spoiler">
             <?php
                 $doc=caricaXML("CategorieSpoiler.xml","");
                 $categorieSpoiler = $doc->getElementsByTagName('CategoriaSpoiler');
@@ -586,10 +591,10 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                    
                 }//end foreach?>
                 </optgroup>
-                <option  value ="altroS" onclick="visibile('catSpoilerCustom')" <?php if(isset($_POST['categorieSpoiler']) && $_POST['categorieSpoiler'] == "altroS") echo 'selected="selected"'?>>Altro</option>
+                <option  value ="altroS"  <?php if(isset($_POST['categorieSpoiler']) && $_POST['categorieSpoiler'] == "altroS") echo 'selected="selected"'?>>Altro</option>
                 
                 </select>
-                <div id="catSpoilerCustom" style="visibility:hidden">
+                <div id="catSpoilerCustom" style="visibility:hidden" >
                     <p>Nome della categoria: </p>
                     <input type ="text"  name ="categoriaSpoilerCustom" value="<?php echo $csc ?>" />
                 </div>

@@ -61,6 +61,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
     if($conta==1){ //se entro qui la query ha avuto buon fine
         while ($row = mysqli_fetch_array($result)){
             $ruolo = $row['ruolo'];
+            $ban = $row['ban'];
         }
         if($ruolo==1){ //admin
             echo "Accesso  riuscito utente admin <br />";
@@ -70,12 +71,16 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
             header("Location: Admin.php"); //l'admin viene automaticamente reindirizzato alla sua bacheca personale
 
         }else{ //qualsiasi altro utente presente nel sistema
+            if($ban != 1){ //se non sono bannato posso effettuare l'accesso altrimenti no
             echo "Accesso  riuscito  <br />";//debug
             session_start();
             $_SESSION['username'] = $nome_utente;
             $_SESSION['password'] = $passmd5;
             header("Location: Forum/forumHP.php"); //tutti gli altri utenti invece vengono reindirizzati alla pagina principale del forum
-        }
+            }else{
+                echo "<div class='containerLogin'><p >Attenzione!Sul tuo account è presente un ban! </p></div>";
+            }
+        }//end else
 
     } else {
         echo "<div class='containerLogin'><p >Attenzione!Accesso non riuscito! Username o password errati! </p></div>";
