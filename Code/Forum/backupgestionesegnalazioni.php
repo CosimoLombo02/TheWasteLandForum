@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Questa è la pagina scheletro di ogni bacheca personale-->
-<?phperror_reporting(E_ALL);
-
-// Abilita il logging degli errori
-ini_set('log_errors', 1);
-
-// Specifica il percorso del file di log (assicurati che PHP abbia i permessi di scrittura)
-ini_set('error_log', 'error.log'); // Sostituisci con il tuo percorso ?>
 
 <!DOCTYPE html
 PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
@@ -24,7 +17,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <script type="text/javascript" src="../JS/banPerm.js"></script>
 </head>
 <body>
-    <?php  //$_SESSION['codice'] = intval($_SESSION['codDiscussione']); echo '<h1>'.var_dump($_SESSION).'</h1>';
+    <?php echo '<h1>'.var_dump($_SESSION).'</h1>'; 
    // $_SESSION['codice'] = $_SESSION['codDiscussione'];
     
     if($_SESSION['username']==ritornaCreatoreDiscussione($_SESSION['codice']) || ritornaRuolo($_SESSION['username'])==1 || sonoModeratore($_SESSION['codice'],$_SESSION['username'])==true){
@@ -34,8 +27,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
        echo '<div class="centrato">';
        echo '<input class="button1" type="submit" name = "sC" value="Segnalazioni da controllare" />';
        echo '<input class="button1" type="submit" name = "sL" value="Segnalazioni lavorate" />';
-       if(ritornaRuolo($_SESSION['username'])==1)
-       echo '<input class="button1" type="submit" name = "r" value="Risalto Admin" />';
        echo '<input class="button1" type="submit" name = "b" value="Torna alla discussione" />';
        echo '<input class="button1" type="submit" name = "bac" value="Bacheca Personale" />';
        echo '</div>';
@@ -51,155 +42,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
      <div class="colonnaGrandeScroll">
         <?php
-        //gestisco ora la pressione del button per le segnalazioni con risalto admin diretto
-        //ovvero le segnalazioni che l'admin deve gestire con il bannare 
-        if($_POST['r']){
-            //se sono qui faccio vedere all'admin tutte le discussioni con risalto
-            $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
-            $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
-           
-            
-   
-            $doc = caricaXML("conseguenzeSegnalazioni.xml","");
-            $conseguenzeSegnalazioni = $doc->getElementsByTagName('ConseguenzaSegnalazioni');
-            foreach ($segnalazioni as $segnalazione) {
-                $codiceS = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
-            $stato = $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue;
-           // if(intval($codiceS)==$_SESSION['codice']){
-               // if(trim($stato)=='in lavorazione') echo '<p class="testoGenerico">ciao</p>';
-               //echo "sono qui";
-            //}
-            $risaltoAdmin = $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue;
-            if($risaltoAdmin==1 && $codiceS==$_SESSION['codice']){
-                $titoloDiscussione = ritornaTitoloDiscussione($_SESSION['codice']);
-                $motivo = $segnalazione->getElementsByTagName('motivazione')->item(0)->nodeValue;
-                $testoPost = ritornaTestoPostCompleto($segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue,$_SESSION['codice']);
-                $nomeUtenteSegnalatore = $segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue;
-                $stato = $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue;
-                $utenteCreatorePost = $segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue;
-                
-                $data = $segnalazione->getElementsByTagName('data')->item(0)->nodeValue;
-                $codicePostSegnalato = $segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue;
-
-                //controlliamo ora le conseguenze della suddetta segnalazione
-                if(presenzaConseguenze($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)){
-                  //mi posiziono alla conseguenza giusta, ovvero quella con codiceSegnalazione = al codcie della segnalazione che abbiamo noi
-                  foreach($conseguenzeSegnalazioni as $conseguenzaSegnalazioni){
-                      if($conseguenzaSegnalazioni->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue == $segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue){
-                        //se sono qui prendo tutti i dati della conseguenza 
-                        $versoChi = $conseguenzaSegnalazioni->getElementsByTagName('versoChi')->item(0)->nodeValue;
-                        $testoWaring = $conseguenzaSegnalazioni->getElementsByTagName('testoWarning')->item(0)->nodeValue;
-                        $descrizioneConseguenza = $conseguenzaSegnalazioni->getElementsByTagName('descrizioneConseguenza')->item(0)->nodeValue;
-                        $dataEvasioneSegnalazione = $conseguenzaSegnalazioni->getElementsByTagName('dataEvasioneSegnalazione')->item(0)->nodeValue;
-                        $utenteGestore = $conseguenzaSegnalazioni->getElementsByTagName('utenteGestore')->item(0)->nodeValue;
-                      }//end if isset conseguenza codice
-
-                  }//end foreach
-
-                }//end if presenzaConseguenze
-
-                      echo "<p class='testoGenerico'>Data : ".$data."</p>";
-                    echo "<p class='testoGenerico'>Titolo Discussione : ".$titoloDiscussione."</p>";
-                    echo "<p class='testoGenerico'>Utente segnalatore : ".$nomeUtenteSegnalatore.'</p>';
-                    echo "<p class='testoGenerico'>Utente creatorePost : ".$utenteCreatorePost.'</p>';
-                    echo "<p class='testoGenerico'>Motivo : ".mappingMotivo($segnalazione->getElementsByTagName('motivazione')->item(0)->nodeValue).'</p>';
-                    echo "<p class='testoGenerico'>Testo post segnalato : ".ritornaTestoPostCompleto($codicePostSegnalato,$_SESSION['codice'])."</p>";
-                     //controllo ora che ci siano file, se ci sono stampo anche quelli a video
-                     
-                     $listaFile=ritornaFilePost($_SESSION['codice'],intval($codicePostSegnalato));
-                     if($listaFile->childElementCount > 0){
-                     
-                        //se sono qui allora stampo i file in un div dedicato
-                        $fileSrcLis = $listaFile->getElementsByTagName('fileSrc');
-                        echo "<div style='display: flex; gap: 10px; justify-content: center; align-items: center;'>";
-                        foreach($fileSrcLis as $fileSrc){
-                           $path ='../FilePostDiscussioni/' .$fileSrc->nodeValue;
-                           echo "<div style='width: 300px; height: 300px; overflow: hidden; text-align: center;'>";
-                           if (str_contains($fileSrc->nodeValue, '.jpg') || str_contains($fileSrc->nodeValue, '.jpeg') || str_contains($fileSrc->nodeValue, '.png')) {
-                               echo "<img src='$path' style='width: 100%; height: 100%; object-fit: cover;' alt='immagine'>";
-                          } else {
-                          echo "<video style='width: 100%; height: 100%; object-fit: cover;' controls>";
-                          echo "<source src='$path' type='video/mp4'>";
-                           echo "</video>";
-                            }
-                           echo "</div>";
-   
-                        }//end foreach
-                        echo '</div>';}
-
-                        if(presenzaConseguenze($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)){
-                          echo '<div class="sinistra2">';
-                           echo "<p class='testoGenerico'>Utente gestore  : ".$utenteGestore."</p>";
-                           echo "<p class='testoGenerico'>Valutazione : ".$stato."</p>";
-                           echo "<p class='testoGenerico'>Data evasione : ".$dataEvasioneSegnalazione.'</p>';
-                           if($descrizioneConseguenza != 0)
-                           echo "<p class='testoGenerico'>Descrizione conseguenza : ".$descrizioneConseguenza.'</p>';
-                           if($versoChi != '')
-                           echo "<p class='testoGenerico'>Verso  : ".$versoChi.'</p>';
-                           if($testoWarning != '')
-                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".$testoWarning.'</p>';
-                           echo '</div>';
-                        }//end if stampa presenza conseguenze 
-
-                        if(ritornaRuolo($_SESSION['username'])==1 && $stato == 'accettata' && presenzaBan($utenteCreatorePost)==false){
-                           echo '<form action="gestioneSegnalazioniDiscussione.php" method = "post">';
-                           echo '<input type="submit" name = "banna" value = "Banna Utente" class="button1" />';
-                           echo "<input type='hidden' name='ucp' value='".$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
-                           echo '</form>';
-
-
-                        }//end if ritornaRuolo
-                        //se segnalazione ancora deve essere lavorata allora do la possibilità all'admin di lavorare completamente la segnalazione
-                        if($stato == 'in lavorazione'){
-                            echo "<form action = 'gestioneSegnalazioniDiscussione.php' method='post'>";
-                            echo '<div>';
-                        echo "<input  name = 'g' class='button1' type='submit' value='Gestisci'>";
-                    echo "<input type='hidden' name='codSeg' value='".$segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue."'/>";
-                     echo "<input type='hidden' name='ucp' value='".$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
-                    echo "<input type='hidden' name='uSeg' value='".$segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue."'/>";
-                    echo "<input type='hidden' name='cpSeg' value='".$segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue."'/>";
-                   echo '</div>';
-                    echo '</form>'; 
-
-                        }//end if lavorazione
-
-
-
-                       
-
-                       
-
-                     echo '<hr />';
-
-
-
-
-            }//end if 
-               
-            
-               
-            
-                        
-                  
-            }//end foreach
-            
-                   
-
-
-
-
-        }//end isset risalto admin
-
-
-
-    
-
-
-
-
-
-
-
 
         //se premo torna indietro allora torno alla pagina delle discussioni
         if(isset($_POST['b'])){
@@ -216,7 +58,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
          echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
          echo '<h3>Banna Utente</h3>';
          echo '<form id="popupForm" action="gestioneSegnalazioniDiscussione.php" method="POST" >';
-         echo '<label for="data">Data fine ban:</label>';
+         echo '<label for="data">Testo post:</label>';
          echo '<input type="date" class="date" name="data" value="'.date("Y-m-d").'" />';
         echo '<input type="submit" class="button" name="invia" value="Invia" />';
          echo '</form>';
@@ -235,8 +77,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 
          $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
-         $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
-        
+         $segnalazioni = $doc->getElementsByTagName('segnalazioni'); 
+         $conta=0; 
          
 
          $doc = caricaXML("conseguenzeSegnalazioni.xml","");
@@ -244,16 +86,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
          if(isset($_POST['sL'])){
             unset($_POST['sC']);
-           
+            //se sono qui stampo tutte le segnalazioni già lavorate, nel 
+            //caso dell'admin inserisco anche la possibilità di bannare un utente
+            foreach($segnalazioni as $segnalazione){
+               if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$_SESSION['codice'] && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue != 'in lavorazione'){
+                //se sono qui semplicemente prendo i dati, li stampo e do la possibilità all'admin di bannare un utente
+                //ricordiamo che un ban viene considerato permanente quando l'admin inserisce una data di fine
+                //ban precedente alla data di decisione del ban
 
-            foreach ($segnalazioni as $segnalazione) {
-                $codiceS = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
-            $stato = $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue;
-           // if(intval($codiceS)==$_SESSION['codice']){
-               // if(trim($stato)=='in lavorazione') echo '<p class="testoGenerico">ciao</p>';
-               //echo "sono qui";
-            //}
-            if($stato != 'in lavorazione' && $codiceS==$_SESSION['codice']){
                 $titoloDiscussione = ritornaTitoloDiscussione($_SESSION['codice']);
                 $motivo = $segnalazione->getElementsByTagName('motivazione')->item(0)->nodeValue;
                 $testoPost = ritornaTestoPostCompleto($segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue,$_SESSION['codice']);
@@ -290,8 +130,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                      //controllo ora che ci siano file, se ci sono stampo anche quelli a video
                      
                      $listaFile=ritornaFilePost($_SESSION['codice'],intval($codicePostSegnalato));
-                     if($listaFile->childElementCount > 0){
-                     
+                     if($listaFile->childElementCount > 0)
+                     $condizione = $listaFile->childNodes->count();
+                     if($condizione > 0){
                         //se sono qui allora stampo i file in un div dedicato
                         $fileSrcLis = $listaFile->getElementsByTagName('fileSrc');
                         echo "<div style='display: flex; gap: 10px; justify-content: center; align-items: center;'>";
@@ -330,53 +171,59 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                            echo "<input type='hidden' name='ucp' value='".$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
                            echo '</form>';
 
+                           
+
 
                         }//end if ritornaRuolo
 
                        
 
-                       
-
                      echo '<hr />';
 
+               }//end if codice segnalazione
 
-
-
-            }//end if 
-               
-            
-               
-            
-                        
-                  
             }//end foreach
-            
-            //echo "<p class='testoGenerico'>$i</p>";
-         }//end id isset segnalazioni lavorate 
+         
+         
+         
+         
+         
+         
+         
+         
+         }
 
          if(isset($_POST['sC'])){
          unset($_POST['sL']);
-         $doc = caricaXML('segnalazioni.xml','schemaSegnalazioni.xsd');
-         $segnalazioni = $doc->getElementsByTagName('segnalazione');
          foreach($segnalazioni as $segnalazione){
-            $codiceS = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
-            $stato = $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue;
-            $nomeUtenteSegnalatore= $segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue;
-            $risaltoAdmin = $segnalazione->lastChild->nodeValue; 
-            //echo "<p class='testoGenerico'>".$codiceS."</p>";
-           // echo '<p class="testoGenerico">'ciao<'/ciao>';
-         //  echo "<p class='testoGenerico'>".var_dump($_SESSION)."</p>";
-            if($_SESSION['codice']==($codiceS) && $_SESSION['username']!=$nomeUtenteSegnalatore && $risaltoAdmin==0){
-               // echo '<p class="testoGenerico">ciao</p>';
-               if($stato == 'in lavorazione'){
-                $codicePost = $segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue;
-                $codiceSegnalazione = $segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue;
-                $data = $segnalazione->getElementsByTagName('data')->item(0)->nodeValue;
-                $titoloDiscussione = ritornaTitoloDiscussione($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue);
+            // echo "<p>Sono qui</p>"; debug
+             if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$_SESSION['codice']){
+               $nomeUtenteSegnalatore= $segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue;
+               if($nomeUtenteSegnalatore == $_SESSION['username']) continue; //salto l'iterazione se la segnalazione è fatta da me
+               //le segnalazioni con risalto admin pari ad 1 le faccio vedere solo all'admin
+               if($segnalazione->lastChild->nodeValue == 1 && ritornaRuolo($_SESSION['username'])==0) continue;
+              
+                //controllo lo stato della segnalazione
+                 $stato = $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue;
                
-                 //controllo ora che ci siano file, se ci sono stampo anche quelli a video
-                 $listaFile=ritornaFilePost($_SESSION['codice'],intval($codicePost));
-                 echo "<p class='testoGenerico'>Data : ".$data."</p>";
+
+                 if($stato =='in lavorazione'){
+                  $conta++;
+                  $codicePost = $segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue;
+                  $codiceSegnalazione = $segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue;
+                  $data = $segnalazione->getElementsByTagName('data')->item(0)->nodeValue;
+                  $titoloDiscussione = ritornaTitoloDiscussione($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue);
+                 
+                  
+                  //controllo ora che ci siano file, se ci sono stampo anche quelli a video
+                  $listaFile=ritornaFilePost($_SESSION['codice'],intval($codicePost));
+                 if($listaFile->childElementCount > 0)
+                  $condizione = $listaFile->childNodes->count();
+                 // var_dump($condizione);
+                 // var_dump(intval($codicePost));
+                 
+
+                    echo "<p class='testoGenerico'>Data : ".$data."</p>";
                     echo "<p class='testoGenerico'>Titolo Discussione : ".$titoloDiscussione."</p>";
                     echo "<p class='testoGenerico'>Utente segnalatore : ".$nomeUtenteSegnalatore.'</p>';
                     //potevamo anche usare direttamente il campo sul file xml piuttosto che la funzione ritornaCreatorePost
@@ -387,15 +234,13 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                     echo "<form action = 'gestioneSegnalazioniDiscussione.php' method='post'>";
                     echo "<input  name = 'g' class='button1' type='submit' value='Gestisci'>";
                     echo "<input type='hidden' name='codSeg' value='".$segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue."'/>";
-                     echo "<input type='hidden' name='ucp' value='".$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
+                     echo "<input type='hidden' name='uCp' value='".$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
                     echo "<input type='hidden' name='uSeg' value='".$segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue."'/>";
                     echo "<input type='hidden' name='cpSeg' value='".$segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue."'/>";
                     echo '</form>'; 
                     echo '</div>'; //chiusura div button gestisci
-
-                    //se sono presenti file li stampo a video
-                    if($listaFile->childElementCount > 0){
-                        //se sono qui allora stampo i file in un div dedicato
+                    if($condizione > 0){
+                     //se sono qui allora stampo i file in un div dedicato
                      $fileSrcLis = $listaFile->getElementsByTagName('fileSrc');
                      echo "<div style='display: flex; gap: 10px; justify-content: center; align-items: center;'>";
                      foreach($fileSrcLis as $fileSrc){
@@ -412,20 +257,28 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
                      }//end foreach
                      echo '</div>';
-                    }
+                    }//end if condizione
+
+                    
+
                     echo '<hr />';
 
-               }
 
-            }//end if  codice discussione segnalazione
-         }//end foreach discussioni
+                  
+                  
+                  
+                  
+                  
+                  
+                  
+                  }//end if esterno
          
+                 
+                }//end if isset codice discussione
+                }//end foreach
+                if($conta == 0) echo '<p class="testoGenerico">Non ci sono segnalazioni non lavorate</p>';
 
-        
-        
-        
-        
-        }//end if isset sC
+               }//end if isset sC
 
                
 
@@ -434,7 +287,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
                if(isset($_POST['g'])){
                   $_SESSION['uSeg'] = $_POST['uSeg'];
-                  $_SESSION['ucp'] = $_POST['ucp'];
+                  $_SESSION['uCp'] = $_POST['uCp'];
                   $_SESSION['codSeg'] = $_POST['codSeg'];
                   $_SESSION['cpSeg'] = $_POST['cpSeg'];
                   //Se sono qui allora faccio partire un div pop up dove sono presenti tutti i dati della discussione
@@ -505,4 +358,88 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     
     
 </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<?php 
+session_start();
+require "funzioniUtili.php";
+$admin = false; //questo flag mi serve per capire se sono l'admin
+if(isset($_SESSION['username'])){
+    if(ritornaRuolo($_SESSION['username'])==1){
+        $admin = true;
+    }
+    if(sonoModeratore($_SESSION['codice'],$_SESSION['username'])==false && $admin == false){
+        header("Location: ../homepage.php");
+    }
+    
+    
+
+}else{
+    session_abort();
+    header("../reservedArea.php");
+}
+
+
+?>
+<!DOCTYPE html> <!--questa pagina contiene video, viene usato html 5-->
+
+<html><head>
+    <title>Segnalazioni</title>
+    <link rel ="stylesheet" href="../CSS/gestioneSegnalazioni.css" type = "text/css" />
+    <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
+    <script type="text/javascript" src="../JS/popUp.js"></script>
+    <script type="text/javascript" src="../JS/banPerm.js"></script>
+</head>
+<body>
+    <?php require "mostraNavBar1.php";?>
+    <div class="centrato">
+        <form action="gestioneSegnalazioniDiscussione.php" method="post">
+        <select name = "scelta" class="sCustom">
+            <div>
+            <option value="in lavorazione">Da lavorare</option>
+            <option value="accettate">Accettate</option>
+            <option value="rifiutate">Rifiutate</option>
+            <?php if($admin) echo '<option value="risalto">Risalto</option>'?>
+            <input type="submit" value="invia" class="button" />
+            </div>
+            </form>
+        </select>
+    </div>
+
+</body>
+<div class="colonnaGrandeScroll">
+    <?php
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+    $segnalazioni = $doc->getElementsByTagName('segnalazioni');
+    $i = 0;
+
+    foreach($segnalazioni as $segnalazione){
+        $codiceDiscussione = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($codiceDiscussione == $_SESSION['codice']){
+           // echo "<p class='testoGenerico'>Ciao</p>";
+           $i++;
+           echo "<p class='testoGenerico'>".$i."</p>";
+
+        }
+
+    }//end foreach segnalazioni
+    
+    
+    
+    
+    
+    
+    
+    ?>
+</div>
+
 </html>

@@ -431,7 +431,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         //scriviamo dati mancanti
         //echo "<h2>Attenzione! Inserire tutti i dati!</h2>";
         //$check=true;
-        popUp('Attenzione! Dati Mancanti!');
+        popUp1('Attenzione! Dati Mancanti!');
        // $check=true;
       // header("Refresh:0");
       //echo "<p>Dati mancanti!</p>";
@@ -567,12 +567,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      <div class="colonnaGrandeCR">
         <p>Presenza spoiler?</p>
         <select name ="sp" class="selectCustom" onchange="onchangeSpoiler()">
-        
-        <option value="si" <?php if(isset($_POST['sp']) && $_POST['sp'] == "si") echo 'selected="selected"';?> onclick="visibile('spoiler')">Si</option>
         <option value="no" <?php if(isset($_POST['sp']) && $_POST['sp'] == "no") echo 'selected="selected"';?> onclick="sparisciSpeciale('spoiler','catSpoilerCustom')">No</option>
+        <option value="si" <?php if(isset($_POST['sp']) && $_POST['sp'] == "si") echo 'selected="selected"';?> onclick="visibile('spoiler')">Si</option>
+        
         </select>
 
-        <div id="spoiler" style="visibility:visible">
+        <div id="spoiler" style="visibility:hidden">
             <p>Categoria Spoiler: </p>
             <select name ="categorieSpoiler"  class="selectCustom" onchange="onchangeSpoilerCustom()">
                 <optgroup label="Categorie di Spoiler">

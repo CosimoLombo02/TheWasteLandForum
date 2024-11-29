@@ -68,7 +68,7 @@ if(isset($_POST["username"]) && isset($_POST["password"])){
             session_start();
             $_SESSION['username'] = $nome_utente;
             $_SESSION['password'] = $passmd5;
-            header("Location: Admin.php"); //l'admin viene automaticamente reindirizzato alla sua bacheca personale
+            header("Location: Forum/Admin.php"); //l'admin viene automaticamente reindirizzato alla sua bacheca personale
 
         }else{ //qualsiasi altro utente presente nel sistema
             if($ban != 1){ //se non sono bannato posso effettuare l'accesso altrimenti no

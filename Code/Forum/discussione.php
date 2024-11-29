@@ -17,7 +17,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
 </head>
 <body>
 
-<?php if(isset($_SESSION['username'])){
+<?php /* if(isset($_SESSION['username'])){
         
         $username=$_SESSION['username'];
         
@@ -30,7 +30,8 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
     
                 }//end else 
 
-                
+                */
+                require "mostraNavBar1.php";
                 
         
                 ?>
@@ -45,6 +46,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                     //sono loggato quindi ho vari button di gestione
                     echo '<form action="discussione.php" method="post">';
                     echo '<input class="button" type="submit" name = "p" value="Nuovo post" />';
+                    if($_SESSION['username'] != ritornaCreatoreDiscussione($_SESSION['codice']))
                     echo '<input class="button1" type="submit" name = "vD" value="Valuta discussione" />';
                     if($_SESSION['username']==ritornaCreatoreDiscussione($_SESSION['codice']) || sonoModeratore($_SESSION['codice'],$_SESSION['username']) || (ritornaRuolo($_SESSION['username'])==1)){
                         echo '<input class="button1" type="submit" name = "sos" value="Sospendi utente" />';
@@ -297,7 +299,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                     echo "<a href='../reservedArea.php'><button class='button'>Login</button></a>";
                 }//end else
                 
-                ?></p></div>
+                ?><!--</p>--></div>
             <div class="pannelloDestro">
                 <h1><?php echo ritornaTitoloDiscussione($_SESSION['codice'])?></h1>
                 
@@ -306,7 +308,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                 //require "../connection.php";
                 $listaPost = ritornaPost($_SESSION['codice']);
                 if($listaPost->childNodes->count()==0) {
-                    echo "<h2>Discussione senza post</h2>";
+                    echo "<h1>Discussione senza post</h1>";
                 }else{
                     //se entro qui significa che la discussione ha dei post
                     $postD = $listaPost->getElementsByTagName('post'); //prendo i post (figli di listapost)
@@ -366,10 +368,56 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                         }
                         $path = "../Avatar/".ritornaAvatar($creatorePost);
                         echo "<img src='$path' class='avatar' alt='avatar'/>";
-                        echo "<p class='testoGenerico'>".$creatorePost." ".statoReputazione(ritornaPunti($creatorePost));
+                        if(presenzaBan($creatorePost)==false){ echo "<p class='testoGenerico'>".$creatorePost." ".statoReputazione(ritornaPunti($creatorePost));}
+                       
+                       else echo "<p class='testoGenerico'>Utente Bannato</p>";
                         echo "<p class='testoGenerico'> ".$data." ".$ora."</p>";
+
+                        //controlliamo ora se esistono delle valutazioni in merito a questo post
+                        $sum = 0;
+                        $valUtilità=$post->getElementsByTagName('valPostUtilità')->item(0);
+                        if($valUtilità->childNodes->count()>0){
+
+                            $valutazioni = $valUtilità->getElementsByTagName('valUt');
+                            foreach($valutazioni as $valutazione){
+                                $sum += intval($valutazione->firstChild->nextSibling->nodeValue);
+                            }
+                            $media = intval($sum/$valUtilità->childNodes->count());
+
+
+                           
+                            echo "<p class='testoGenerico'>Media Valutazioni Utilità:";
+                            for($i=0; $i<$media; $i++)
+                                echo "<span>&#9733;</span>";            //&#9733; è il codice per la stella piena
+                            for($i=0; $i<(5-$media); $i++)
+                                echo "<span>&#9734;</span>";            //&#9734; è il codice per la stella vuota
+                            echo "</p>";
+                            // echo "<p class='testoGenerico'>".$media."</p>";
+                             
+                        }
+                         $sum = 0;
+                        $valAccordanza = $post->getElementsByTagName('valPostAccordanza')->item(0);
+                        if($valAccordanza->childNodes->count()>0){
+                            $valutazioni = $valAccordanza->getElementsByTagName('valutazioneAcc');
+                            foreach($valutazioni as $valutazione){
+                                $sum += intval($valutazione->firstChild->nextSibling->nodeValue);
+                            }
+                            $media = intval($sum/$valAccordanza->childNodes->count());
+                           // $media = ( mediaValutazioniPost(1,$_SESSION['codice'],$post->getElementsByTagName('codicePost')->item(0)->nodeValue));
+                            echo "<p class='testoGenerico'>Media Valutazioni Accordanza:";
+                            for($i=0; $i<$media; $i++)
+                                echo "<span>&#9733;</span>";            //&#9733; è il codice per la stella piena
+                            for($i=0; $i<(5-$media); $i++)
+                                echo "<span>&#9734;</span>";            //&#9734; è il codice per la stella vuota
+                            echo "</p>";
+                           // echo "<p class='testoGenerico'>".$media."</p>";
+                        }
+
+
+
+
                         
-                        $media = mediaValutazioniPost(0,$_SESSION['codice'],$post->getElementsByTagName('codicePost')->item(0)->nodeValue);
+                       /* 
                         if($media != 0.0){
                             if($media!=0){
                                 echo "<p class='testoGenerico'>Media Valutazioni Utilità:";
@@ -389,7 +437,11 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                                 for($i=0; $i<(5-$media); $i++)
                                     echo "<span>&#9734;</span>";            //&#9734; è il codice per la stella vuota
                                 echo "</p>";}
-                        }
+                        }*/
+
+
+
+
                         echo "<p class='testoGenerico'>".nl2br($testoPost)."</p>";
                         //ora controlliamo se ci sono immagini e/o video, se si le facciamo visualizzare
                        /* if(isset($nomiFile)){
@@ -441,8 +493,11 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                         if($_SESSION['username'] != $post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue){
                         echo "<button class='button' name='v' >Valuta</button>";
                         //i post scritti dall'admin non possono essere segnalati
-                        if(ritornaRuolo($creatorePost)==0)
-                        echo "<button class='button' name='s'>Segnala</button>";}
+                        if(ritornaRuolo($creatorePost)==0 && ritornaRuolo($_SESSION['username'])==0)
+                        echo "<button class='button' name='s'>Segnala</button>";
+                        if(ritornaRuolo($_SESSION['username'])==1 && presenzaBan($creatorePost)==false)
+                        echo "<button class='button' name='banna'>Banna </button>";
+                    }
                         
                         if($_SESSION['username']==ritornaCreatoreDiscussione($_SESSION['codice']) || sonoModeratore($_SESSION['codice'],$_SESSION['username']) || $_SESSION['username']=='admin'){
                            //i post dell'admin non possono essere nascosti, pero lui puo' nascondere anche i propri post
@@ -452,6 +507,11 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                         echo "<input type='hidden' name='codPost' value='".$post->getElementsByTagName('codicePost')->item(0)->nodeValue."'/>";
                         echo "<input type='hidden' name='creatorePost' value='".$post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
                         echo "</form>"; 
+
+                       
+
+
+
 
                         if(isset($_POST['nascondi'])){
                             $_SESSION['codPost'] = $_POST['codPost'];
@@ -594,7 +654,20 @@ if(isset($_POST['s'])){
 
 }//end segnalazione
 
+if(isset($_POST['banna'])){
+    $_SESSION['creatorePost'] = $_POST['creatorePost'];               
+    echo '<div id="overlay"></div>';
+    echo '<div id="popup">';
+    echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
+    echo '<h3>Banna Utente</h3>';
+    echo '<form id="popupForm" action="bannaUtente.php" method="POST" >';
+    echo '<label for="data">Testo post:</label>';
+    echo '<input type="date" class="date" name="data" value="'.date("Y-m-d").'" />';
+   echo '<input type="submit" class="button" name="invia" value="Invia" />';
+    echo '</form>';
+    echo '</div>';}//end if banna
 
+    
 
 
 

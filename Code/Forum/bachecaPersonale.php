@@ -30,9 +30,10 @@ else{
     header("Location: ../reservedArea.php");
 }
 
-if($username==="admin"){
+if(ritornaRuolo($username)==1){
     //admin page ancora da sviluppare 
-    echo "comando io"; //qui se si è l'admin si viene reindirizzati nella sua bacheca personale dedicata 
+    //echo "comando io"; //qui se si è l'admin si viene reindirizzati nella sua bacheca personale dedicata 
+    header('Location: Admin.php');
 }else{
     /*if($conta==1){echo popUp($_SESSION['username']); }*/
 
@@ -60,7 +61,7 @@ if($username==="admin"){
     
 }//end else admin?>
 <body>
-<?php echo "<div class='topnav'><a href='../logout.php'>Logout</a><a href='../homepage.php'>Pagina iniziale</a><a href='forumHP.php'>Forum</a><a href='regGenerali.php'>Regole Generali</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a><a href='discussioni.php'>Discussioni</a><a href='nuovaDiscussione.php'>Nuova discussione</a></div>";?>
+<?php require "mostraNavBar1.php";// echo "<div class='topnav'><a href='../logout.php'>Logout</a><a href='../homepage.php'>Pagina iniziale</a><a href='forumHP.php'>Forum</a><a href='regGenerali.php'>Regole Generali</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a><a href='discussioni.php'>Discussioni</a><a href='nuovaDiscussione.php'>Nuova discussione</a></div>";?>
 <div class='container'>
             <?php
             
@@ -172,23 +173,6 @@ if($username==="admin"){
              echo "<div><h1>Non moderi nessuna discussione</h1></div>";
             }
          
-         
-         
-         
-         
-
-         
-              
-
-         
-              
-              
-
-
-
-
-         
-
 
         }else{
             if(isset($_POST['segnalazioni'])){
@@ -247,6 +231,7 @@ if($username==="admin"){
                                 if($conseguenza->getElementsByTagName('testoWarning')->item(0)->nodeValue != null){
                                     $testoWarning=$conseguenza->getElementsByTagName('testoWarning')->item(0)->nodeValue;
                                     echo "<p>Nota dal gestore : ".nl2br($testoWarning)."</p>";
+                                    echo '<hr />';
                                 }//end if testoWarning
                                 
 

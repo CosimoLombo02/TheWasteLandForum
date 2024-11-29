@@ -21,7 +21,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <!--i link cambiano a seconda se si è loggati o meno
     quando si entra nella pagina di un media, la voce relativa a quel media viene sostituita
     con una voce per tornare alla pagina principale-->
-    <?php 
+    <?php /*
 
     if(isset($_SESSION['username'])){
       $User=$_SESSION['username'];
@@ -33,7 +33,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 
         }//end else
-    
+    */require "mostraNavBar.php";
     
     ?>
     

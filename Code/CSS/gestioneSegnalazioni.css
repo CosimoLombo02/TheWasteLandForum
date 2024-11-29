@@ -176,7 +176,7 @@ textarea{
 
  div.centrato{
     position: relative;
-    transform: translateX(35%); /*per metterlo più in alto*/
+    transform: translateX(27%); 
   }
   div.colonnaGrandeScroll{
     overflow-y: scroll;
@@ -190,4 +190,45 @@ textarea{
   border-color: green;
  max-height: 400px;
 }  
+
+div.sinistra{
+  position:relative;
+  transform: translate(80%,-95%); /*x - y*/
+}
+
+.date{
+  color:green;
+  background-color: black;
+  border-style: solid;
+  border:1%;
+  border-color: green;
+  padding:1%;
+ /* float:left;*/
+ display: inline-block;
+ height:50px;
+ width:110px;
+ flex-wrap: wrap;
+  
+}
+
+.date:hover{
+  color:black;
+  background-color: green;
+  cursor: pointer;
+}
+
+div.sinistra2{
+  position:relative;
+  transform: translate(40%,-470%); /*x - y*/
+}
+
+select.sCustom{
+  color:green;
+  background-color:black;
+  border-color:green;
+  height:40px;
+  width:200px;
+  font-size:x-large;
+  
+}
 

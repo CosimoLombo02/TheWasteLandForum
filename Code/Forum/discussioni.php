@@ -2,7 +2,7 @@
 <?php
 
 session_start();
-require "funzioniUtili.php";
+require_once "funzioniUtili.php";
 
      
 ?>
@@ -23,7 +23,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     
 </head>
 <body>
-    <?php if(isset($_SESSION['username'])){
+    <?php /* if(isset($_SESSION['username'])){
         
         $User=$_SESSION['username'];
         
@@ -35,7 +35,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     
     
                 }//end else 
-
+*/ require "mostraNavBar1.php";
                 
                 
         
@@ -57,7 +57,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 <option value="Fallout3" <?php if(isset($_POST['Media']) && $_POST['Media'] == "Fallout3") echo 'selected="selected"';?>>Fallout 3</option>
                 <option value="Fallout4"<?php if(isset($_POST['Media']) && $_POST['Media'] == "Fallout4") echo 'selected="selected"';?>>Fallout 4</option>
                 <option value="FalloutBOS"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutBOS") echo 'selected="selected"';?>>Fallout BOS</option>
-                <option value="FalloutTactics"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutTactics") echo 'selected="selected"';?>>Fallout Tatics</option>
+                <option value="FalloutTactics"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutTactics") echo 'selected="selected"';?>>Fallout Tactics</option>
                 <option value="FalloutNewVegas" <?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutNewVegas") echo 'selected="selected"';?>>Fallout New Vegas</option>
                 <option value="FalloutSerieTv"<?php if(isset($_POST['Media']) && $_POST['Media'] == "FalloutSerieTv") echo 'selected="selected"';?>>Fallout Serie Tv</option>
             </select>

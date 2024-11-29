@@ -14,7 +14,7 @@
     <!--i link cambiano a seconda se si è loggati o meno-->
     <?php
     session_start();
-     if(isset($_SESSION['username'])){
+    /* if(isset($_SESSION['username'])){
         
     $User=$_SESSION['username'];
     
@@ -25,7 +25,8 @@
             echo "<div class='topnav'><a href='../reservedArea.php'>Login</a><a href='../homepage.php'>Pagina iniziale</a><a href='regGenerali.php'>Regole Generali</a><a href='discussioni.php'>Discussioni</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a></div>";
 
 
-            }//end else?>
+            }//end else
+            */ require "mostraNavBar1.php";?>
     
 
     <div class="container">

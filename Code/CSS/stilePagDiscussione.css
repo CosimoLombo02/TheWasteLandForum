@@ -54,9 +54,9 @@ div.topnav {
     left: 35%;
     width: 65%;
     max-height:500px;
-    border-style:solid;
+    border-style:none;
     overflow-y: scroll;
-    transform: translateY(-40%); /*per metterlo più in alto*/
+    transform: translateY(-10%); /*per metterlo più in alto o piu in basso*/
   }
 
   p.testoGenerico{
@@ -189,6 +189,25 @@ textarea{
     background-color: green;
     cursor: pointer;
  }
+ .date{
+  color:green;
+  background-color: black;
+  border-style: solid;
+  border:1%;
+  border-color: green;
+  padding:1%;
+ /* float:left;*/
+ display: inline-block;
+ height:50px;
+ width:110px;
+ flex-wrap: wrap;
+  
+}
 
+.date:hover{
+  color:black;
+  background-color: green;
+  cursor: pointer;
+}
 
 

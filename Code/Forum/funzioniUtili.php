@@ -1,6 +1,6 @@
 <?php 
 
-  function popUp($string){ 
+  function popUp1($string){ 
     
     echo "<script>alert('$string');</script>"; 
   }
@@ -1209,8 +1209,8 @@ function ritornaRuolo($nomeUtente){
 //comando = 0 utilita
 //comando = 1 accordanza
 
-function mediaValutazioniPost($comando,$codiceDiscussione,$codicePost){
-    $media = 0.0; $i=0.0;
+/*function mediaValutazioniPost($comando,$codiceDiscussione,$codicePost){
+   /* $media = 0.0; $i=0.0;
     $listaPost = ritornaPost($codiceDiscussione);
     $listaP = $listaPost->getElementsByTagName('post');
     foreach($listaP as $p){
@@ -1241,9 +1241,38 @@ function mediaValutazioniPost($comando,$codiceDiscussione,$codicePost){
         return $media;
     }
 
-    return ($media/($i));
+    return ($media/($i));*/
+  /*  $listaPost = ritornaPost($codiceDiscussione);
+    $listaP = $listaPost->getElementsByTagName('post');
+    $media = 0;
+    $i = 0;
+    foreach($listaP as $p){
+        if($comando == 0){
+            //utilità
+            $i++;
+            $valU = $p->getElementsByTagName('valPostUtilità')->item(0);
+            $VU = $valU->getElementsByTagName('valUt');
+            foreach($VU as $v){
+                $media+=intval($v->getElementsByTagName('valore')->item(0)->nodeValue);
+                
+            }//end foreach
 
-}//end mediaValutazioniPost
+        }else{
+            //accordanza
+            $i++;
+            $valA = $p->getElementsByTagName('valPostAccordanza')->item(0);
+            $VA = $valA->getElementsByTagName('valutazioneAcc');
+            foreach($VA as $v){
+                $media+=intval($v->getElementsByTagName('valore')->item(0)->nodeValue);
+                
+            }//end foreach
+
+        }//end else
+    }//end foreach
+
+return ($media /($i));
+
+}//end mediaValutazioniPost*/
 
 function ritornaModeratoriEletti($codiceDiscussione){
 $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
@@ -1300,8 +1329,569 @@ function ritornaCreatorePost($codicePost,$codiceDiscussione){
     }//end foreach esterno
 }//end ritorna creatore post
 
+//questa funzione si occupa di ritornare il tag listaFile di un determinato post in una determinata discussione
+function ritornaFilePost($codiceDiscussione,$codicePost){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codiceDiscussione){
+            $listaPost = $discussione->getElementsByTagName('listaPost')->item(0);
+            $postL = $listaPost->getElementsByTagName('post');
+            foreach($postL as $post){
+                if($post->getElementsBytagName('codicePost')->item(0)->nodeValue==$codicePost)
+                return $post->getElementsByTagName('filePost')->item(0);
+                
+                
+            }//end inner foreach 
+        }//end if codice
+    
+    }//end foreach esterno
+}//end ritorna File Post
 
+//funzione che serve per motivi grafici nel visualizzare il motivo di una segnalazione
+function mappingMotivo($string){
+    if($string == 'linguaggioOff') return 'Linguaggio Offensivo';
+    if($string == 'offTopic') return 'Off-Topic';
+    if($string == 'Razzismo') return 'Razzismo';
+    if($string == 'Politica') return 'Politica';
+    if($string == 'suggDannosi') return 'Suggerimenti Dannosi';
+    if($string == 'Bullismo') return 'Bullismo';
+    
+}//end mappingMotivo
 
-
+//questa funzione serve per bannare un utente
+function bannaUtente($nomeUtente,$dataFineBan){
+    require "connection1.php";
+    $sql = "update utenti set ban=1,dataFineBan='$dataFineBan' where strcmp(nomeUtente,'$nomeUtente')=0";
+                        $result = mysqli_query($conn,$sql);
+                        if($result){
+                           return true;
+                        }//end if result
+   
+else return false;
+}//end bannaUtente
   
+//funzione che serve per accettare/rifiutare segnalazioni, ovvero per settare il file xml
+function accettaRifiutaSegnalazione($stato,$codiceSegnalazione){
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+  $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
+  foreach($segnalazioni as $segnalazione){
+    if($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue==$codiceSegnalazione){
+      // echo "sono qui";
+        $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue=$stato;
+    }//end if codice Segnalazione
+
+  }//end foreach
+  //ora controllo che tutto sia valido e salvo nel file xml relativo
+  if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
+    $doc->save("../XML/segnalazioni.xml");
+}
+
+}//end accettaRifiutaSegnalazione
  
+
+//serve per il risalto dell'admin
+function cambiaRisalto($risalto,$codiceSegnalazione){
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+  $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
+  foreach($segnalazioni as $segnalazione){
+    if($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue==$codiceSegnalazione){
+      // echo "sono qui";
+        $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue=$risalto;
+    }//end if codice Segnalazione
+
+  }//end foreach
+  //ora controllo che tutto sia valido e salvo nel file xml relativo
+  if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
+    $doc->save("../XML/segnalazioni.xml");
+}
+
+}//end accettaRifiutaSegnalazione
+
+//questa funzione serve per vedere se un utente è bannato o meno
+function presenzaBan($nomeUtente){
+    require "connection1.php";
+    $sql = "select ban from utenti where strcmp(nomeUtente,'$nomeUtente')=0";
+                        $result = mysqli_query($conn,$sql);
+                        if($result){
+                            while($row = mysqli_fetch_array($result)){
+                                $ban = $row['ban'];
+                            }
+                            if($ban== 0)  return false;
+                            else return true;
+                           //return true;
+                        }//end if result
+                        else return false;
+   
+//else return false;
+
+
+}//end presenzaBan
+
+//questa funzione serve per eliminare fisicamente una discussione dal file xml
+function eliminaDiscussione($codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    $root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            $root->removeChild($discussione);
+            
+        }
+
+    }//end foreach
+
+    eliminaSegnalazione($codiceDiscussione); //elimino anche tutte le segnalazioni su questa discussione
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+}//end elimina discussione
+
+//questa funzione serve per cambiare il media di una discussione
+function cambiaMedia($media,$codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    //$root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            $discussione->getElementsByTagName('MediaDiRiferimento')->item(0)->nodeValue = $media;
+            
+        }
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end cambia media 
+
+//ritorna il media di una discussione
+function ritornaMedia($codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    //$root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            return $discussione->getElementsByTagName('MediaDiRiferimento')->item(0)->nodeValue ;
+            
+        }
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end ritornaMedia
+
+//questa funzione mi serve per eliminare una categoria di spoiler
+//cambia   mi dice se voglio cambiare la categoria di spoiler
+//elimina se la voglio eliminare
+/*
+function operaCategoriaSpoiler($cambia,$elimina,$codiceDiscussione,$nome,$nomeNew,$valoreNew){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    $r=$doc->documentElement;
+    //$root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        $codice = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if(($codice == $codiceDiscussione) && count($discussione->getElementsByTagName('CategoriaSpoiler'))>0){
+            if($cambia ==true && $nomeNew != ''){
+               
+                $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue==$nomeNew;
+               
+            }
+            if($elimina == true){
+                //se sono qui la elimino ed elimino tutte le valutazioni che ha ricevuto quel post su quella categoria
+                $valSpoiler = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0);
+                $valS = $valSpoiler->childNodes;
+                foreach($valS as $v){
+                    $valSpoiler->removeChild($v);
+                }
+                $doc4=caricaXML("CategorieSpoiler.xml","");
+                $catS = $doc4->getElementsByTagName('CategoriaSpoiler');
+                $root = $doc4->documentElement;
+                foreach($catS as $c){
+                    if($c->getElementsByTagName('nome')->item(0)->nodeValue == $nome){
+                        $root->removeChild($c);
+                    }
+                }
+                if($nomeNew == ''){
+                    $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue=='ricategorizzare';
+                    $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue==0;
+                }
+
+            }
+            
+        }
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd") && $doc4->validate()){
+        $doc->save("../XML/Discussioni.xml");  
+         $doc4->save("../XML/CategorieSpoiler.xml");
+    }
+    
+
+}//end function categoria <spoiler></spoiler>
+*/
+
+//questa funzione mi permette di eliminare una categoria di spoiler
+function eliminaCategoriaSpoiler($nome){
+    $doc4=caricaXML("CategorieSpoiler.xml","");
+    $catS = $doc4->getElementsByTagName('CategoriaSpoiler');
+    $root = $doc4->documentElement;
+
+    foreach($catS as $c){
+        if($c->getElementsByTagName('nome')->item(0)->nodeValue==$nome){
+         $root->removeChild($c);
+        }
+    }
+
+    //ora entro nelle discussioni
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('CategoriaSpoiler')->count()>0){
+            if($discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue==$nome){
+              cambiaCategoriaSpoiler('ricategorizzare',$discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue,0);
+            }//end if nome
+        }//end if count
+
+    }//end foreach
+
+     //qui ora devo salvare le modifiche effettuate 
+     if( $doc4->validate()){
+        
+    $doc4->save("../XML/CategorieSpoiler.xml");
+    }
+
+
+}//end eliminaCategoriaSpoiler
+
+function cambiaCategoriaSpoiler($nome,$codiceDiscussione,$valoreNew){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    $root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue = $nome;
+            $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue = $valoreNew;
+           $valS = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0);
+           $val = $valS->getElementsByTagName('valutazioneDiscussioneSpoiler');
+           if($valS->childNodes->count()>0){
+            foreach($val as $v){
+                $valS->removeChild($v);
+            }//end foreach interno
+           }//end if count
+        
+        }//end if codice discussione
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end cambia categoria Spoiler
+
+/*questa funzione mi permette di cambiare una sottocategoria
+function cambiaCategoria($categoria,$codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    $root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue = $nome;
+            $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue = $valoreNew;
+           $valS = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0);
+           $val = $valS->getElementsByTagName('valutazioneDiscussioneSpoiler');
+           if($valS->childNodes->count()>0){
+            foreach($val as $v){
+                $valS->removeChild($v);
+            }//end foreach interno
+           }//end if count
+        
+        }//end if codice discussione
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end <cambiaCategoria></cambiaCategoria>
+*/
+
+//questa funzione mi permette di rimuovere una sottocategoria
+function rimuoviSottoCategoria($nome,$categoria){
+    $doc3=caricaXML("sottocategorie.xml","");
+    $sottocategorie = $doc3->getElementsByTagName('Sottocategoria');
+    $root = $doc3->documentElement;
+
+    foreach($sottocategorie as $sottocategoria){
+        $nomeS = $sottocategoria->getElementsByTagName('nome')->item(0)->nodeValue;
+        $categoriaDiRif = $sottocategoria->getElementsByTagName('categoriaDiRif')->item(0)->nodeValue;
+   if($nomeS == $nome && $categoria == $categoriaDiRif){
+    $root->removeChild($sottocategoria);
+   }
+   
+    }//end foreach sottocategoria
+    //ora vado in tutte le discussioni con quella determinaat sottocategoria e le metto come ricategorizzare
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('Categoria')->item(0)->nodeValue==$categoria && $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue==$nome){
+           /* $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue='ricategorizzare';
+            $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue='ricategorizzare';
+            
+        */ echo 'sono qui'; //debug
+        $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue='ricategorizzare';
+        $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue='ricategorizzare';
+    }
+    }//end foreach discussioni
+
+
+
+
+
+    if($doc3->validate()){
+         //qui ora devo salvare le modifiche effettuate 
+    if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+        $doc3->save("../XML/sottocategorie.xml");
+    }
+
+        
+        
+ 
+        }
+    
+
+}//end rimuovi Sottocategoria
+
+function cambiaCatSottoCat($categoria,$sottocategoria,$codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    //$root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue = $categoria;
+            $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue = $sottocategoria;
+        }
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end cambia
+
+//questa funzione mi serve per inserire una sottocategoria
+
+function inserisciSottocategoria($nome,$categoriaDiRif,$inseritaDa,$dataInserimento){
+    $doc=caricaXML("sottocategorie.xml","");
+            $root = $doc->documentElement;
+            
+
+            $r = $doc->createElement('Sottocategoria');
+                  
+
+            $ele1 = $doc->createElement('nome');
+            $ele1->nodeValue=$nome;
+            $r->appendChild($ele1);
+
+            $ele2 = $doc->createElement('categoriaDiRif');
+            $ele2->nodeValue=$categoriaDiRif;
+            $r->appendChild($ele2);
+
+            $ele2 = $doc->createElement('inseritaDa');
+            $ele2->nodeValue=$inseritaDa;
+            $r->appendChild($ele2);
+
+            $ele3 = $doc->createElement('dataInserimento');
+            $ele3->nodeValue=$dataInserimento;
+            $r->appendChild($ele3);
+
+
+            $root->appendChild($r); 
+
+            if($doc->validate()) $doc->save("../XML/sottocategorie.xml");
+            
+}//end inserisci sottocategoria
+
+//questa funzione serve per inserire una categoria di spoiler
+function inserisciCategoriaSpoiler($nome,$utenteCreatore,$dataInserimento){
+    $doc=caricaXML("CategorieSpoiler.xml","");
+    $root = $doc->documentElement;
+    
+
+    $r = $doc->createElement('CategoriaSpoiler');
+      
+    $ele1 = $doc->createElement('nome');
+    $ele1->nodeValue=$nome;
+    $r->appendChild($ele1);
+
+    $ele2 = $doc->createElement('utenteCreatore');
+    $ele2->nodeValue=$utenteCreatore;
+    $r->appendChild($ele2);
+
+    $ele3 = $doc->createElement('dataInserimento');
+    $ele3->nodeValue=$dataInserimento;
+    $r->appendChild($ele3);
+
+
+    $root->appendChild($r); 
+
+    if($doc->validate()) $doc->save("../XML/CategorieSpoiler.xml");
+    else die("Errore generico!");
+}//end inserisci categoria spoiler
+
+/*questa funzione permette di far inserie all'admin uno spoiler che non è presente nella discussione
+function inserisciSpoilerDiscussione($codiceDiscussione,$tipo,$level){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    //$root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        if($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione){
+            $spoilerLevel = $doc->createElement('SpoilerLevel');
+            $spoilerLevel->nodeValue  = $level;
+            $t = $doc->createElement('CategoriaSpoiler');
+            $t->nodeValue=$tipo;
+            $discussione->insertBefore($t,$discussione->getElementsByTagName('Descrizione')->item(0));
+            $discussione->insertBefore($spoilerLevel,$discussione->getElementsByTagName('Descrizione')->item(0));
+        }
+
+    }//end foreach
+
+
+
+     //qui ora devo salvare le modifiche effettuate 
+     if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }else{
+        $doc->save("../XML/error.xml");
+    }
+
+}//end inserisci spoiler discussione
+*/
+
+function inserisciSpoilerDiscussione($codiceDiscussione, $tipo, $level) {
+    $doc = caricaXML("Discussioni.xml", "schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach ($discussioni as $discussione) {
+        if ($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue == $codiceDiscussione) {
+            
+            // Crea gli elementi CategoriaSpoiler e SpoilerLevel
+            $spoilerLevel = $doc->createElement('SpoilerLevel');
+            $spoilerLevel->nodeValue = $level;
+            $categoriaSpoiler = $doc->createElement('CategoriaSpoiler');
+            $categoriaSpoiler->nodeValue = $tipo;
+
+            // Trova il nodo Descrizione
+            $descrizione = $discussione->getElementsByTagName('Descrizione')->item(0);
+            
+            // Verifica che Descrizione esista
+            if ($descrizione) {
+                // Debug: stampiamo il nodo Descrizione per vedere la posizione
+                //echo "Descrizione trovato: " . $descrizione->nodeValue . "<br>";
+
+                // Inserisci CategoriaSpoiler e SpoilerLevel prima di Descrizione
+                $discussione->insertBefore($categoriaSpoiler, $descrizione);
+                $discussione->insertBefore($spoilerLevel, $descrizione);
+            } else {
+                echo "Errore: Descrizione non trovata.<br />"; //debug 
+            }
+        }
+    }
+
+    // Validazione dello schema prima di salvare
+    if ($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")) {
+        // Debug: stampa il documento XML per vedere se tutto è a posto
+        
+        $doc->save("../XML/Discussioni.xml");
+    } else {
+       
+        $doc->save("../XML/error.xml");
+    }
+}
+
+//questa funzione ci permette di capire se una categoria è gia stata inserita o meno(intendo di spoiler)
+function giaInseritaSpoiler($nome){
+   
+    $doc=caricaXML("CategorieSpoiler.xml","");
+    $categorieSpoiler = $doc->getElementsByTagName('CategoriaSpoiler');
+    foreach($categorieSpoiler as $categoriaSpoiler){
+        if($categoriaSpoiler->getElementsByTagName('nome')->item(0)->nodeValue == $nome) return true;
+    }//end foreach
+
+return false; 
+}//end giainserita spoiler
+
+
+//questa funzione mi permette di capire se una categoria ed una sottocategoria sono gia state inserite
+function giaInseritaCat($nome1,$nome2){
+    $doc = caricaXML("sottocategorie.xml","");
+    $sottocategorie = $doc->getElementsByTagName('Sottocategoria');
+    foreach($sottocategorie as $sottocategoria){
+        if($sottocategoria->getElementsByTagName('nome')->item(0)->nodeValue==$nome1 && $sottocategoria->getElementsByTagName('categoriaDiRif')->item(0)->nodeValue==$nome2){
+            return true;
+        }//end if 
+
+    }//end foreach
+    return false;
+}//end gia inserita
+
+//questa funzione mi permette di eliminare tutte le segnalazioni ricevute su una determinata discussione
+function eliminaSegnalazione($codiceDiscussione){
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+    $segnalazioni = $doc->getElementsByTagName('segnalazione');
+    $root = $doc->documentElement;
+    foreach($segnalazioni as $segnalazione){
+        $codiceDis = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($codiceDis == $codiceDiscussione){
+            $root->removeChild($segnalazione);
+        }
+    }
+    if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
+        $doc->save("../XML/segnalazioni.xml");
+    }
+
+
+}//end eliminaSegnalazione
+
+
+
