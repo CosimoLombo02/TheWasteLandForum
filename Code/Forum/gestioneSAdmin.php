@@ -131,6 +131,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             echo "<input type='hidden' name='codSeg' value='".$segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue."'/>";
              echo "<input type='hidden' name='ucp' value='".$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue."'/>";
             echo "<input type='hidden' name='uSeg' value='".$segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue."'/>";
+            echo "<input type='hidden' name='codDisc' value='".$segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue."'/>";
             echo "<input type='hidden' name='cpSeg' value='".$segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue."'/>";
            echo '</div>';
             echo '</form>'; 
@@ -182,13 +183,14 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             $_SESSION['ucp'] = $_POST['ucp'];
             $_SESSION['codSeg'] = $_POST['codSeg'];
             $_SESSION['cpSeg'] = $_POST['cpSeg'];
+            $_SESSION['codiceDiscussione'] = $_POST['codDisc'];
             //Se sono qui allora faccio partire un div pop up dove sono presenti tutti i dati della discussione
             //se sono l'admin ho piu funzionalità, come ad esempio il ban dell'utente
             echo '<div id="overlay"></div>';
 echo '<div id="popup">';
 echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
 echo '<h3>Gestisci</h3>';
-echo '<form id="popupForm" action="insConseguenza.php" method="POST">';
+echo '<form id="popupForm" action="insConseguenza1.php" method="POST">';
 echo '<label for="valuta">Valuta:</label>';
 
 echo '<select name ="valuta">';

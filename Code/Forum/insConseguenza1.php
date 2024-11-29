@@ -2,11 +2,12 @@
 session_start();
 require "funzioniUtili.php";
 
+var_dump($_SESSION);
 
 if(isset($_POST['valuta'])){
 if(isset($_POST['nP'])){
     if($_POST['nP']=='si'){
-        OperaSuPost(1,$_SESSION['codice'],$_SESSION['cpSeg']);
+        OperaSuPost(1,$_SESSION['codiceDiscussione'],$_SESSION['cpSeg']);
     }
     if(isset($_POST['w'])){
         if($_POST['w']=='' && $_POST['valuta']=='accettata'){
@@ -36,7 +37,7 @@ if(isset($_POST['nP'])){
 
         if(isset($_POST['sU'])){
             if($_POST['sU']=='si'){
-                sospendiUtente($_SESSION['codice'],$_SESSION['ucp']);
+                sospendiUtente($_SESSION['codiceDiscussione'],$_SESSION['ucp']);
             }
         }
 
@@ -62,6 +63,6 @@ if(isset($_POST['nP'])){
     }
 }//end if isset nP
 
-echo "<html><head><script>alert(' Operazione completata con successo!'); window.location.href='gestioneSegnalazioniDiscussione.php'</script></head><body></body></html>";
+echo "<html><head><script>alert(' Operazione completata con successo!'); window.location.href='gestioneSAdmin.php'</script></head><body></body></html>";
 
 }//end if isset valuta
