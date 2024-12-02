@@ -366,7 +366,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             //echo "<p class='testoGenerico'>".$codiceS."</p>";
            // echo '<p class="testoGenerico">'ciao<'/ciao>';
          //  echo "<p class='testoGenerico'>".var_dump($_SESSION)."</p>";
-            if($_SESSION['codice']==($codiceS) && $_SESSION['username']!=$nomeUtenteSegnalatore && $risaltoAdmin==0){
+            if($_SESSION['codice']==($codiceS) && $_SESSION['username']!=$nomeUtenteSegnalatore && $risaltoAdmin==0 && ($_SESSION['username']!= $segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue)){
                // echo '<p class="testoGenerico">ciao</p>';
                if($stato == 'in lavorazione'){
                 $codicePost = $segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue;

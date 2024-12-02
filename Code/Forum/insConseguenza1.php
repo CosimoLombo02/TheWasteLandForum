@@ -31,7 +31,7 @@ if(isset($_POST['nP'])){
             //rifiuto con warning
             accettaRifiutaSegnalazione($_POST['valuta'],$_SESSION['codSeg']);
             punti($_SESSION['uSeg'],-2);
-            inserisciConseguenza($_SESSION['codSeg'],$_POST['w'],$_SESSION['uSeg'],+2,date('Y-m-d'),$_SESSION['username']);
+            inserisciConseguenza($_SESSION['codSeg'],$_POST['w'],$_SESSION['uSeg'],-2,date('Y-m-d'),$_SESSION['username']);
 
         }
 
