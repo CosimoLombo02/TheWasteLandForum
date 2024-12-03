@@ -1,0 +1,56 @@
+@import url('https://fonts.cdnfonts.com/css/share-tech-mono'); /*font usato nei terminali della saga*/
+  
+
+body {
+    font-family: 'Share Tech Mono',sans-serif; font-size:  22px;
+    background-color: black;
+}
+
+div{
+    color:green;
+}
+
+
+
+p{
+  text-align: justify;
+ 
+}
+
+div.topnav {
+    background-color: black;
+    overflow: hidden;
+    margin-left: 4.5%;
+    margin-right: 4.5%;
+    
+    
+    
+  }
+
+  .topnav a {
+    float: left;
+    color: green;
+    text-align: center;
+    padding: 12px 12px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: 'Share Tech Mono';
+    background-color: black;
+    
+  }
+
+  /* cambia il colore quando si passa sopra con il mouse */
+.topnav a:hover {
+    background-color: green;
+    color: black;
+  }
+  
+  /* colora il link attivo */
+  .topnav a.active {
+    background-color: black;
+    color: yellow;
+  }
+
+  ul { list-style-image:URL(../ImmaginiVideoSito/iconaLista.png) ;
+}
+

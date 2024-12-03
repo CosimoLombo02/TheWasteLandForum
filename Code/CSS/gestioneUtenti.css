@@ -1,0 +1,4 @@
+div.sinistraU{
+    position:relative;
+    transform: translate(50%,-400%); /*x - y*/
+  }
