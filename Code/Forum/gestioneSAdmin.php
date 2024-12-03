@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Questa è la pagina scheletro di ogni bacheca personale-->
 
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
 
 
 <head>
-    <title> <?php error_reporting(E_ALL & ~E_WARNING);  //disattiva gli warning, parlarne con Denis
+    <title> <?php //error_reporting(E_ALL & ~E_WARNING);  //disattiva gli warning, parlarne con Denis
      session_start(); require "funzioniUtili.php"; echo 'Discussioni con risalto' ?></title> 
     <link rel ="stylesheet" href="../CSS/gestioneSegnalazioni.css" type = "text/css" />
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
@@ -27,7 +23,12 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
    }?>
 
    <div class="colonnaGrandeScroll">
+
     <?php
+    $segnalazioniRisalto = contaSegnalazioniRisalto();
+    if($segnalazioniRisalto == 0){
+        echo '<p class="testoGenerico">Nessuna segnalazione con risalto</p>';
+    }
     //se sono qui faccio vedere all'admin tutte le discussioni con risalto
     $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
     $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
@@ -102,7 +103,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                 echo '</div>';}
 
                 if(presenzaConseguenze($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)){
-                  echo '<div class="sinistra2">';
+                  echo '<div>';
                    echo "<p class='testoGenerico'>Utente gestore  : ".$utenteGestore."</p>";
                    echo "<p class='testoGenerico'>Valutazione : ".$stato."</p>";
                    echo "<p class='testoGenerico'>Data evasione : ".$dataEvasioneSegnalazione.'</p>';
@@ -110,7 +111,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                    echo "<p class='testoGenerico'>Descrizione conseguenza : ".$descrizioneConseguenza.'</p>';
                    if($versoChi != '')
                    echo "<p class='testoGenerico'>Verso  : ".$versoChi.'</p>';
-                   if($testoWarning != '')
+                   if($testoWaring != '')
                    echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".$testoWarning.'</p>';
                    echo '</div>';
                 }//end if stampa presenza conseguenze 

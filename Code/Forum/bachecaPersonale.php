@@ -182,7 +182,7 @@ if(ritornaRuolo($username)==1){
                 //carico il file XML
                 echo "<div class='colonnaGrandeScroll'>";
             $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
-            $segnalazioni = $doc->getElementsByTagName('segnalazioni'); 
+            $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
             $conta=0; 
             
 
@@ -209,7 +209,7 @@ if(ritornaRuolo($username)==1){
                     echo "<p>Testo post segnalato : ".$testoPostSegnalato."</p>";
                     echo "<p>Stato : ".$stato.'</p>';
                     
-                    //presenzaConseguenzeè un flag che serve a capire se la segnalazione ha conseguenze o meno
+                    //presenzaConseguenze un flag che serve a capire se la segnalazione ha conseguenze o meno
                     $presenzaConseguenze = presenzaConseguenze($codiceSegnalazione);
                     
 
@@ -250,7 +250,7 @@ if(ritornaRuolo($username)==1){
                 }//end if principale all'interno del foreach
                 
 
-            }
+            } //end foreach
             echo "</div>"; //div colonnaGrandeScroll segnalazioni
 
             if($conta==0){

@@ -6,6 +6,8 @@ if(isset($_SESSION['codice'])){
     if(isset($_POST['utente'])){
         rimuoviModeratore($_SESSION['codice'],$_POST['utente']);
         echo "<html><head><script>alert(' Operazione completata con successo!'); window.location.href='discussione.php'</script></head><body></body></html>";
+    }else{
+        echo "<html><head><script>alert('Operazione non valida!'); window.location.href='discussione.php'</script></head><body></body></html>";
     }
 
 }

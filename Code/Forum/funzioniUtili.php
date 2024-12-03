@@ -1893,5 +1893,56 @@ function eliminaSegnalazione($codiceDiscussione){
 
 }//end eliminaSegnalazione
 
+//questa funzione conta le segnalazioni 
+//comando = 0 segnalazioni non lavorate
+//comando = 1 segnalazioni lavorate
+//comando =  2 segnalazioni con risalto
+function contaSegnalazioni($codDiscussione,$comando){
+    $conta = 0; 
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+    $segnalazioni = $doc->getElementsByTagName('segnalazione');
+    
+    foreach($segnalazioni as $segnalazione){
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue == 'in lavorazione' && $comando == 0){
+            $conta++; 
+        }
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue != 'in lavorazione' && $comando == 1){
+            $conta++;
+        }
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue == 1 && $comando == 2){
+            $conta++;
+        }
+      
+    }
+   
+    return $conta  ;
+}//end contaSegnalazioni
 
+//questa funzione invece con le segnalazioni con risalto dell'intero sistema
+function contaSegnalazioniRisalto(){
+    $conta = 0; 
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+    $segnalazioni = $doc->getElementsByTagName('segnalazione');
+    
+    foreach($segnalazioni as $segnalazione){
+       
+        if( $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue == 1 ){
+            $conta++;
+        }
+      
+    }
+   
+    return $conta  ;
+}//end contaSegnalazioniRisalto
 
+//questa funzione serve per ritornare lo stato di una discussione
+function statoDiscussione($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('statoDiscussione')->item(0)->nodeValue;
+    }
+
+}

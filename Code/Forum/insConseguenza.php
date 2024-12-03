@@ -30,12 +30,13 @@ if(isset($_POST['nP'])){
             //rifiuto con warning
             accettaRifiutaSegnalazione($_POST['valuta'],$_SESSION['codSeg']);
             punti($_SESSION['uSeg'],-2);
-            inserisciConseguenza($_SESSION['codSeg'],$_POST['w'],$_SESSION['uSeg'],+2,date('Y-m-d'),$_SESSION['username']);
+            inserisciConseguenza($_SESSION['codSeg'],$_POST['w'],$_SESSION['uSeg'],-2,date('Y-m-d'),$_SESSION['username']);
 
         }
 
         if(isset($_POST['sU'])){
-            if($_POST['sU']=='si'){
+            //se è già sospeso allora non lo sospendo di nuovo
+            if($_POST['sU']=='si' && sonoSospeso($_SESSION['codice'],$_SESSION['ucp'])==false){
                 sospendiUtente($_SESSION['codice'],$_SESSION['ucp']);
             }
         }
