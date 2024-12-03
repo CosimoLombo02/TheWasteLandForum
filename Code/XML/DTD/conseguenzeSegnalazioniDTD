@@ -1,8 +1,0 @@
-﻿<!ELEMENT ConseguenzeSegnalazioni (ConseguenzaSegnalazioni*)>
-<!ELEMENT ConseguenzaSegnalazioni (codiceSegnalazione+, testoWarning*, versoChi+, descrizioneConseguenza+, dataEvasioneSegnalazione+, utenteGestore+)>
-<!ELEMENT codiceSegnalazione (#PCDATA)>
-<!ELEMENT testoWarning (#PCDATA)>
-<!ELEMENT versoChi (#PCDATA)>
-<!ELEMENT descrizioneConseguenza (#PCDATA)>
-<!ELEMENT dataEvasioneSegnalazione (#PCDATA)>
-<!ELEMENT utenteGestore (#PCDATA)>

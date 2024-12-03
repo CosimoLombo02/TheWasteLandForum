@@ -1,6 +1,0 @@
-<!ELEMENT Sottocategorie (Sottocategoria+)>
-<!ELEMENT Sottocategoria (nome+, categoriaDiRif+, inseritaDa+, dataInserimento+)>
-<!ELEMENT nome (#PCDATA)>
-<!ELEMENT categoriaDiRif (#PCDATA)>
-<!ELEMENT inseritaDa (#PCDATA)>
-<!ELEMENT dataInserimento (#PCDATA)>
