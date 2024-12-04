@@ -1,6 +1,11 @@
 <?php
 session_start();
 require "funzioniUtili.php";
+//filtro per il warning
+if(isset($_POST['w'])){
+    $filtro = $_POST['w'];
+    $_POST['w'] = trim($filtro);
+}
 
 //var_dump($_SESSION);
 

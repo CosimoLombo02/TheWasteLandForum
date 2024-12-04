@@ -1,4 +1,17 @@
 <?php session_start(); require "funzioniUtili.php";
+
+if(isset($_POST['stc'])){
+    $filtro = trim($_POST['stc']);
+    if($filtro == ""){
+        echo "<html><head><script>alert('Operazione non valida! Modifica non effettuata'); window.location.href='Admin.php'</script></head><body></body></html>";
+        die();
+    }else{
+        $_POST['stc'] = $filtro;
+    }
+}
+
+
+
 if(isset($_SESSION['codice'])){
     if(isset($_POST['categoriaSottoCategoria'])){
         if($_POST['categoriaSottoCategoria'] == 'altroC'){

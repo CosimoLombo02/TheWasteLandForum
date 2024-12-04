@@ -112,7 +112,7 @@
                    if($versoChi != '')
                    echo "<p class='testoGenerico'>Verso  : ".$versoChi.'</p>';
                    if($testoWaring != '')
-                   echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".$testoWarning.'</p>';
+                   echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".nl2br($testoWaring).'</p>';
                    echo '</div>';
                 }//end if stampa presenza conseguenze 
 

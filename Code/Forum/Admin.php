@@ -48,9 +48,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
     <script type="text/javascript" src="../JS/popUp.js"></script>
     <script type="text/javascript" src="../JS/onchange1.js"></script>
-    <script type="text/javascript" src="../JS/controllaInput.js"></script>
-    <script type="text/javascript" src="../JS/controllaInput1.js"></script>
-    <script type="text/javascript" src="../JS/controllaInput2.js"></script>
+    
+   
+    
     
 </head>
 <body>
