@@ -27,6 +27,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
     <script type="text/javascript" src="../JS/controllaNumeroFile.js"></script>
     <script type="text/javascript" src="../JS/popUp.js"></script>
+    <script type="text/javascript" src="../JS/controllaInputInserimentoPost.js"></script>
 </head>
 <body>
 
@@ -602,7 +603,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
     echo '<div id="popup">';
     echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
     echo '<h3>Inserisci Post</h3>';
-    echo '<form id="popupForm" action="insPost.php" method="POST" enctype="multipart/form-data">';
+    echo '<form id="popupForm" action="insPost.php" method="POST" onsubmit="preventINS(event)" enctype="multipart/form-data">';
     echo '<label for="testo">Testo post:</label>';
     echo '<textarea id="testo" rows="10" cols="50" name="testo" required></textarea><br /><br />';
     echo '<input class="button" type="file" id="fileInput" name="files[]" multiple="multiple" accept="image/png,image/jpeg,image/jpg,image/gif,video/*"/><div id="anteprima"></div>';
