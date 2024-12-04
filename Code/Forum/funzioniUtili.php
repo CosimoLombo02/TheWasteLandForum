@@ -1597,12 +1597,14 @@ function cambiaCategoriaSpoiler($nome,$codiceDiscussione,$valoreNew){
             $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue = $nome;
             $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue = $valoreNew;
            $valS = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0);
-           $val = $valS->getElementsByTagName('valutazioneDiscussioneSpoiler');
-           if($valS->childNodes->count()>0){
-            foreach($val as $v){
-                $valS->removeChild($v);
-            }//end foreach interno
-           }//end if count
+        /* echo $valS->childElementCount;
+         echo $valS->childNodes->count();
+         echo $codiceDiscussione;
+           if($valS->childNodes->count() > 0){
+            
+            eliminaValutazioniSpoilerDiscussione($codiceDiscussione); //elimino tutte le valutazioni spoiler
+         }*/
+        //eliminaValutazioniSpoilerDiscussione($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue);
         
         }//end if codice discussione
 
@@ -1616,6 +1618,34 @@ function cambiaCategoriaSpoiler($nome,$codiceDiscussione,$valoreNew){
     }
 
 }//end cambia categoria Spoiler
+
+// questa funzione serve per eliminare le valutazioni spoiler di una discussione
+function eliminaValutazioniSpoilerDiscussione($codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    $root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        $conta = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0)->childElementCount;
+        $codice = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($codice == $codiceDiscussione && $conta > 0){
+            //mi posiziono sul tag valutazioni discussione spoiler e elimino i figli
+            $figli = $discussione -> getElementsByTagName('valutazioneDiscussioneSpoiler');
+            $padre = $figli->item(0)->parentNode;
+            while($padre->firstChild){
+                $padre->removeChild($padre->firstChild);
+            }
+            
+
+        }//end if codice discussione
+    }
+
+    //qui ora devo salvare le modifiche effettuate 
+    if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end elimina valutazioni discussione spoiler
 
 /*questa funzione mi permette di cambiare una sottocategoria
 function cambiaCategoria($categoria,$codiceDiscussione){
@@ -1946,3 +1976,56 @@ function statoDiscussione($code){
     }
 
 }
+
+//questa funzione restituisce la categoria di spoiler  di una discussione attraverso il suo codice
+function ritornaTipoSpoiler($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue;
+    }
+
+    
+
+  }//end function
+
+  //questa funzione ritorna lo spoiler level di una discussione
+  function ritornaLevelSpoiler($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue;
+    }
+
+    
+
+  }//end function
+
+
+//questa funzione serve per ritornare la categoria di una discussione
+function ritornaCategoria($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue;
+    }
+
+}//end function
+
+//questa funzione ritorna una sottocategoria di una discussione
+function ritornasottoCategoria($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue;
+    }
+
+}//end function

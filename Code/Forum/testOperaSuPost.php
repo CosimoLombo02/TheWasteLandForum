@@ -13,5 +13,8 @@ require "funzioniUtili.php";
 //eliminaCategoriaSpoiler('');
 /*if(giaInseritaCat('h','Mods')==false)echo "ciao";
 else echo "we";*/
-echo contaSegnalazioni(1,1);
+//echo contaSegnalazioni(1,1);
+//eliminaValutazioniDiscussione(1);
+//cambiaCategoriaSpoiler('ciao',1,3);
+eliminaValutazioniSpoilerDiscussione(1);
 
