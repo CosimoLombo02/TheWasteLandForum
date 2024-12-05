@@ -1933,7 +1933,8 @@ function contaSegnalazioni($codDiscussione,$comando){
     $segnalazioni = $doc->getElementsByTagName('segnalazione');
     
     foreach($segnalazioni as $segnalazione){
-        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue == 'in lavorazione' && $comando == 0){
+        $rA = $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue;
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue == 'in lavorazione' && $comando == 0 && $rA==0){
             $conta++; 
         }
         if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue != 'in lavorazione' && $comando == 1){

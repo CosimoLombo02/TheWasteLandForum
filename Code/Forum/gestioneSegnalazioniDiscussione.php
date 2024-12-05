@@ -25,7 +25,9 @@
       
        echo '<form action="gestioneSegnalazioniDiscussione.php" method="post">';
        echo '<div class="centrato">';
+       if(ritornaRuolo($_SESSION['username'])==0)
        echo '<input class="button1" type="submit" name = "sC" value="Segnalazioni da controllare" />';
+      else echo '<input class="button1" type="submit" name = "sC" value="Da controllare senza risalto" />';
        echo '<input class="button1" type="submit" name = "sL" value="Segnalazioni lavorate" />';
        if(ritornaRuolo($_SESSION['username'])==1)
        echo '<input class="button1" type="submit" name = "r" value="Risalto Admin" />';
@@ -133,8 +135,8 @@
                            echo "<p class='testoGenerico'>Descrizione conseguenza : ".$descrizioneConseguenza.'</p>';
                            if($versoChi != '')
                            echo "<p class='testoGenerico'>Verso  : ".$versoChi.'</p>';
-                           if($testoWarning != '')
-                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".nl2br($testoWarning).'</p>';
+                           if($testoWaring != '')
+                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".nl2br($testoWaring).'</p>';
                            echo '</div>';
                         }//end if stampa presenza conseguenze 
 
