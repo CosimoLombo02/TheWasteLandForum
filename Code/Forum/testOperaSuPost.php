@@ -16,5 +16,7 @@ else echo "we";*/
 //echo contaSegnalazioni(1,1);
 //eliminaValutazioniDiscussione(1);
 //cambiaCategoriaSpoiler('ciao',1,3);
-eliminaValutazioniSpoilerDiscussione(1);
+//eliminaValutazioniSpoilerDiscussione(1);
+//punti('account1',-2);
+valutaPost(0,1,1,date('Y-m-d'),5,'test668');
 

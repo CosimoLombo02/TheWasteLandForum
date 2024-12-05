@@ -1009,6 +1009,7 @@ function modificaValutazionePost($comando,$nomeUtente,$codiceDiscussione,$codice
         $postL = $listaPost->getElementsByTagName('post');
         foreach($postL as $post){
             if($post->getElementsBytagName('codicePost')->item(0)->nodeValue==$codicePost){
+                //$creatorePost = $post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue;
                 //a seconda del comando inserisco il tipo di valutazione
                 if($comando == 0){
                    $valutazioniUt = $post->getElementsByTagName('valPostUtilità')->item(0);
@@ -1024,7 +1025,7 @@ function modificaValutazionePost($comando,$nomeUtente,$codiceDiscussione,$codice
                         //sezione punti
                         $punti =0;
                         //in questi due casi restituiamo i punti tolti precedentemente
-                        if($old==1) $punti+=2;
+                       /* if($old==1) $punti+=2;
                         if($old==2) $punti+=1;
 
                         //in questi altri due casi invece i punti li togliamo
@@ -1041,8 +1042,28 @@ function modificaValutazionePost($comando,$nomeUtente,$codiceDiscussione,$codice
                         default: echo "errore!";break;
 
                     }//end switch
-                    //ora aggiorno i punti
-                    punti($nomeUtente,$punti);
+                    */
+                    //con questi switch controllo l'aggiornamento della valutazione
+                    //con questo primo switch elimino gli effetti della valutazione precedente
+                    switch($old){
+                        case 1:  punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,2); break;
+                        case 2: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,1); break;
+                        case 3: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,0); break;
+                        case 4: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-1); break;
+                       case 5: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-2); break;
+                       default: echo "errore generico"; break;
+                    }
+
+                    //con questo invece invio gli effetti della nuova valutazione
+                    switch($valore){
+                        case 1:  punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-2); break;
+                        case 2: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-1); break;
+                        case 3: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,0); break;
+                        case 4: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,+1); break;
+                       case 5: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,+2); break;
+                       default: echo "errore generico"; break;
+                    }
+                  
                     }//end controllo nomeUtente
                    }//end foreach 
 
@@ -1908,8 +1929,8 @@ function giaInseritaCat($nome1,$nome2){
 //questa funzione mi permette di eliminare tutte le segnalazioni ricevute su una determinata discussione
 function eliminaSegnalazione($codiceDiscussione){
     $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
-    $segnalazioni = $doc->getElementsByTagName('segnalazione');
-    $root = $doc->documentElement;
+    $segnalazioni = $doc->getElementsByTagName('segnalazioni')->item(0);
+  /*  $root = $doc->documentElement;
     foreach($segnalazioni as $segnalazione){
         $codiceDis = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
         if($codiceDis == $codiceDiscussione){
@@ -1918,7 +1939,10 @@ function eliminaSegnalazione($codiceDiscussione){
     }
     if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
         $doc->save("../XML/segnalazioni.xml");
-    }
+    }*/
+while($segnalazioni->firstChild){
+    $segnalazioni->removeChild($segnalazioni->firstChild);
+}
 
 
 }//end eliminaSegnalazione
@@ -1934,7 +1958,7 @@ function contaSegnalazioni($codDiscussione,$comando){
     
     foreach($segnalazioni as $segnalazione){
         $rA = $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue;
-        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue == 'in lavorazione' && $comando == 0 && $rA==0){
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue == 'in lavorazione' && $comando == 0 && $rA==0 && $_SESSION['username']!=$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue && $_SESSION['username']!=$segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue){
             $conta++; 
         }
         if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue != 'in lavorazione' && $comando == 1){

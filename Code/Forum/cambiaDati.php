@@ -76,7 +76,7 @@ else{
 
                  cambiaTutto($_SESSION['username'],$oldUsername); //da testare bene
 
-                 
+                 echo "<div><p>Nome utente correttamente aggiornato</p></div>";
 
 
 
@@ -111,6 +111,9 @@ else{
 
                     }//end else email gia presente
                 }//end if filter validate 
+                else{
+                    echo "<div><p>Attenzione!Email non valida</p></div>";
+                }//end else filtervalidate
 
             }//end if diverse 
 
@@ -194,6 +197,7 @@ else{
                     $result = mysqli_query($conn, $sql);
                     $path = "../Avatar/".$nomeAvatar;
                     unlink($path); 
+                    header("Location: cambiaDati.php");
                 }//end if
             }//end else imageFileType
 
@@ -214,6 +218,13 @@ else{
 
     <div >
        <form action="cambiaDati.php" method = "post" enctype="multipart/form-data">
+       <div class='container'>
+            <?php
+            $path = '../Avatar/'.$nomeAvatar;
+            
+            echo "<img src='$path' class='immagineCornice' alt='$nomeAvatar'/>";
+            ?>
+        </div>
         
         <p>Nuovo Nome Utente:  </p>  
         <p><input class="input" type="text" name = "newusername" size="100" value="<?php echo $username?>" /> </p>

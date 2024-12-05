@@ -10,7 +10,7 @@
 
 <head>
     <title> <?php //error_reporting(E_ALL & ~E_WARNING);  //disattiva gli warning, parlarne con Denis
-     session_start(); require "funzioniUtili.php"; echo ritornaTitoloDiscussione($_SESSION['codice']) ?></title> 
+     session_start(); require "funzioniUtili.php"; require "riferimento.php"; echo ritornaTitoloDiscussione($_SESSION['codice']) ?></title> 
     <link rel ="stylesheet" href="../CSS/gestioneSegnalazioni.css" type = "text/css" />
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
     <script type="text/javascript" src="../JS/popUp.js"></script>

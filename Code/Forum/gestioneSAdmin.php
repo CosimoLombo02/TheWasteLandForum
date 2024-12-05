@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../JS/banPerm.js"></script>
 </head>
 <body>
-    <?php require "mostraNavBar1.php"; ?>
+    <?php require "mostraNavBar1.php"; require "riferimento.php"; ?>
    <?php if(!isset($_SESSION['username'])){
     header("Location:../reservedArea.php");
    }

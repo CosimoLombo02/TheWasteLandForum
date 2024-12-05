@@ -1,6 +1,6 @@
 <?php session_start(); require "funzioniUtili.php";
 
-if(isset($_POST['stc'])){
+if(isset($_POST['stc']) && isset($_POST['categoriaSottoCategoria']) && $_POST['categoriaSottoCategoria']=='altroC'){
     $filtro = trim($_POST['stc']);
     if($filtro == ""){
         echo "<html><head><script>alert('Operazione non valida! Modifica non effettuata'); window.location.href='Admin.php'</script></head><body></body></html>";

@@ -2,6 +2,7 @@
 <!--Questa è la pagina scheletro di ogni bacheca personale-->
 <?php
 session_start(); 
+require "riferimento.php";
 if(isset($_SESSION['codice'])) unset($_SESSION['codice']);
 if(isset($_SESSION['codDiscussione'])) unset($_SESSION['codDiscussione']);
 if(isset($_SESSION['titolo'])) unset($_SESSION['titolo']);

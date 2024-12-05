@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+
+<head>
+    <title> Gestione Utenti</title> 
+    <link rel ="stylesheet" href="../CSS/bachecapersonale.css" type = "text/css" />
+    <link rel ="stylesheet" href="../CSS/adminStile.css" type = "text/css" />
+    <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
+    <script type="text/javascript" src="../JS/popUp.js"></script>
+    
+</head>
+<body>
 <?php
 
-session_start();
+session_start(); require "riferimento.php";
 require_once "funzioniUtili.php";   require "connection1.php"; //require "mostraNavBar1.php";
 if(isset($_SESSION['username'])){
     if(ritornaRuolo($_SESSION['username']) == 0){
@@ -38,24 +57,6 @@ if(isset($_SESSION['username'])){
     }
 
 ?>
-
-
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
-
-<head>
-    <title> Gestione Utenti</title> 
-    <link rel ="stylesheet" href="../CSS/bachecapersonale.css" type = "text/css" />
-    <link rel ="stylesheet" href="../CSS/adminStile.css" type = "text/css" />
-    <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
-    <script type="text/javascript" src="../JS/popUp.js"></script>
-    
-</head>
-<body>
     
         <div class="colonnaGrandeScroll">
             <?php
