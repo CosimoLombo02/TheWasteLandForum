@@ -18,6 +18,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 <?php 
 //qui min occupo di recuperare i dati dell'utente
 session_start();
+require "riferimento.php";
 require "funzioniUtili.php";
 require "../connection.php";
 $conta=1;
@@ -241,7 +242,7 @@ if(ritornaRuolo($username)==1){
                         }//end inner foreach
 
                     }
-
+                    echo "<hr />";
 
 
                     

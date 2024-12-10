@@ -1929,23 +1929,53 @@ function giaInseritaCat($nome1,$nome2){
 //questa funzione mi permette di eliminare tutte le segnalazioni ricevute su una determinata discussione
 function eliminaSegnalazione($codiceDiscussione){
     $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
-    $segnalazioni = $doc->getElementsByTagName('segnalazioni')->item(0);
-  /*  $root = $doc->documentElement;
-    foreach($segnalazioni as $segnalazione){
-        $codiceDis = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
-        if($codiceDis == $codiceDiscussione){
-            $root->removeChild($segnalazione);
-        }
+    $segnalazioni = $doc->getElementsByTagName('segnalazione');
+  
+$segnalazioniRim = []; //array delle segnalazioni da rimuovere
+foreach($segnalazioni as $segnalazione){
+    $codiceDis = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+    if($codiceDis == $codiceDiscussione){
+        $segnalazioniRim[] = $segnalazione; //raccolgo le segnalazioni da rimuovere
+    }//end if 
+}//end foreach
+
+//var_dump($segnalazioniRim); debug 
+
+//in questo for elimino le segnalazioni e anche le conseguenze 
+foreach($segnalazioniRim as $s){
+    //se c'è la conseguenza allora la elimino, altrimenti no
+    if(presenzaConseguenze($s->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)==true){
+       // echo "sono qui"; debug 
+        eliminaConseguenza($s->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue);
     }
-    if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
-        $doc->save("../XML/segnalazioni.xml");
-    }*/
-while($segnalazioni->firstChild){
-    $segnalazioni->removeChild($segnalazioni->firstChild);
+    
+    $s->parentNode->removeChild($s);
+}//end foreach
+
+//qui salvo sia in schema segnalazioni che nelle conseguenze 
+if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
+    $doc->save("../XML/segnalazioni.xml");
 }
 
-
 }//end eliminaSegnalazione
+
+//questa funzione serve per eliminare la conseguenza di una segnalazione
+function eliminaConseguenza($code){
+    $doc=caricaXML("conseguenzeSegnalazioni.xml","");
+    $conseguenze = $doc->getElementsByTagName('ConseguenzaSegnalazioni');
+    foreach($conseguenze as $conseguenza){
+        if($conseguenza->getElementsbyTagName('codiceSegnalazione')->item(0)->nodeValue==$code){
+            $conseguenza->parentNode->removeChild($conseguenza); //rimuovo il nodo dal file
+        }//end if 
+
+    }//end foreach
+
+    //ora salvo tutto nel file xml
+    if($doc->validate()){
+        $doc->save("../XML/conseguenzeSegnalazioni.xml");
+    }
+    
+}//end elimina conseguenza 
 
 //questa funzione conta le segnalazioni 
 //comando = 0 segnalazioni non lavorate
