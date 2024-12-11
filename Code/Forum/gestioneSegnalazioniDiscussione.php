@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--Questa è la pagina scheletro di ogni bacheca personale-->
-<?phperror_reporting(E_ALL);
 
-// Abilita il logging degli errori
-ini_set('log_errors', 1);
 
-// Specifica il percorso del file di log (assicurati che PHP abbia i permessi di scrittura)
-ini_set('error_log', 'error.log'); // Sostituisci con il tuo percorso ?>
+<!DOCTYPE html>
 
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
 
 
 <head>
-    <title> <?php error_reporting(E_ALL & ~E_WARNING);  //disattiva gli warning, parlarne con Denis
-     session_start(); require "funzioniUtili.php"; echo ritornaTitoloDiscussione($_SESSION['codice']) ?></title> 
+    <title> <?php //error_reporting(E_ALL & ~E_WARNING);  //disattiva gli warning, parlarne con Denis
+     session_start(); require "funzioniUtili.php"; require "riferimento.php"; echo ritornaTitoloDiscussione($_SESSION['codice']) ?></title> 
     <link rel ="stylesheet" href="../CSS/gestioneSegnalazioni.css" type = "text/css" />
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
     <script type="text/javascript" src="../JS/popUp.js"></script>
@@ -32,7 +25,9 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       
        echo '<form action="gestioneSegnalazioniDiscussione.php" method="post">';
        echo '<div class="centrato">';
+       if(ritornaRuolo($_SESSION['username'])==0)
        echo '<input class="button1" type="submit" name = "sC" value="Segnalazioni da controllare" />';
+      else echo '<input class="button1" type="submit" name = "sC" value="Da controllare senza risalto" />';
        echo '<input class="button1" type="submit" name = "sL" value="Segnalazioni lavorate" />';
        if(ritornaRuolo($_SESSION['username'])==1)
        echo '<input class="button1" type="submit" name = "r" value="Risalto Admin" />';
@@ -53,7 +48,11 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         <?php
         //gestisco ora la pressione del button per le segnalazioni con risalto admin diretto
         //ovvero le segnalazioni che l'admin deve gestire con il bannare 
-        if($_POST['r']){
+        if(isset($_POST['r'])){
+         unset($_POST['sL']);
+         unset($_POST['sC']);
+             $sR = contaSegnalazioni($_SESSION['codice'],2);
+             if($sR == 0) echo "<p class='testoGenerico'>Nessuna segnalazione con risalto!</p>";
             //se sono qui faccio vedere all'admin tutte le discussioni con risalto
             $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
             $segnalazioni = $doc->getElementsByTagName('segnalazione'); 
@@ -128,7 +127,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                         echo '</div>';}
 
                         if(presenzaConseguenze($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)){
-                          echo '<div class="sinistra2">';
+                          echo '<div>';
                            echo "<p class='testoGenerico'>Utente gestore  : ".$utenteGestore."</p>";
                            echo "<p class='testoGenerico'>Valutazione : ".$stato."</p>";
                            echo "<p class='testoGenerico'>Data evasione : ".$dataEvasioneSegnalazione.'</p>';
@@ -136,8 +135,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                            echo "<p class='testoGenerico'>Descrizione conseguenza : ".$descrizioneConseguenza.'</p>';
                            if($versoChi != '')
                            echo "<p class='testoGenerico'>Verso  : ".$versoChi.'</p>';
-                           if($testoWarning != '')
-                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".$testoWarning.'</p>';
+                           if($testoWaring != '')
+                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".nl2br($testoWaring).'</p>';
                            echo '</div>';
                         }//end if stampa presenza conseguenze 
 
@@ -217,7 +216,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
          echo '<h3>Banna Utente</h3>';
          echo '<form id="popupForm" action="gestioneSegnalazioniDiscussione.php" method="POST" >';
          echo '<label for="data">Data fine ban:</label>';
-         echo '<input type="date" class="date" name="data" value="'.date("Y-m-d").'" />';
+         echo '<input type="date" class="date" name="data" value="'.date("Y-m-d", strtotime("+1 day")).'" />';
         echo '<input type="submit" class="button" name="invia" value="Invia" />';
          echo '</form>';
          echo '</div>';}//end if banna
@@ -244,6 +243,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
          if(isset($_POST['sL'])){
             unset($_POST['sC']);
+            $sL = contaSegnalazioni($_SESSION['codice'],1);
+             if($sL == 0) echo "<p class='testoGenerico'>Nessuna segnalazione lavorata!</p>";
            
 
             foreach ($segnalazioni as $segnalazione) {
@@ -311,7 +312,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                         echo '</div>';}
 
                         if(presenzaConseguenze($segnalazione->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)){
-                          echo '<div class="sinistra2">';
+                          echo '<div>';
                            echo "<p class='testoGenerico'>Utente gestore  : ".$utenteGestore."</p>";
                            echo "<p class='testoGenerico'>Valutazione : ".$stato."</p>";
                            echo "<p class='testoGenerico'>Data evasione : ".$dataEvasioneSegnalazione.'</p>';
@@ -319,8 +320,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                            echo "<p class='testoGenerico'>Descrizione conseguenza : ".$descrizioneConseguenza.'</p>';
                            if($versoChi != '')
                            echo "<p class='testoGenerico'>Verso  : ".$versoChi.'</p>';
-                           if($testoWarning != '')
-                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".$testoWarning.'</p>';
+                           if($testoWaring != '')
+                           echo "<p class='testoGenerico'>Testo Warning/Ringraziamento : ".nl2br($testoWaring).'</p>';
                            echo '</div>';
                         }//end if stampa presenza conseguenze 
 
@@ -356,6 +357,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
          if(isset($_POST['sC'])){
          unset($_POST['sL']);
+         $sC = contaSegnalazioni($_SESSION['codice'],0);
+             if($sC == 0) echo "<p class='testoGenerico'>Nessuna segnalazione da lavorare!</p>";
          $doc = caricaXML('segnalazioni.xml','schemaSegnalazioni.xsd');
          $segnalazioni = $doc->getElementsByTagName('segnalazione');
          foreach($segnalazioni as $segnalazione){
@@ -366,7 +369,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             //echo "<p class='testoGenerico'>".$codiceS."</p>";
            // echo '<p class="testoGenerico">'ciao<'/ciao>';
          //  echo "<p class='testoGenerico'>".var_dump($_SESSION)."</p>";
-            if($_SESSION['codice']==($codiceS) && $_SESSION['username']!=$nomeUtenteSegnalatore && $risaltoAdmin==0 && ($_SESSION['username']!=$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue)){
+            if($_SESSION['codice']==($codiceS) && $_SESSION['username']!=$nomeUtenteSegnalatore && $risaltoAdmin==0 && ($_SESSION['username']!= $segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue)){
                // echo '<p class="testoGenerico">ciao</p>';
                if($stato == 'in lavorazione'){
                 $codicePost = $segnalazione->getElementsByTagName('codicePostSegnalato')->item(0)->nodeValue;
@@ -460,6 +463,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
       echo '<p class="testoGenerico">Warning/ringraziamento:</p>';
       echo '<textarea rows="10" cols="50" name="w"></textarea><br /><br />';
 
+      
       echo '<label for="sU">Sospendi utente dalla discussione:</label>';
       echo '<select name = "sU">';
       echo '<option value="si" >Si</option>';
@@ -481,7 +485,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
          echo '<option value="si" >Si</option>';
          echo '</select>';
          echo '<div id="dataBan" style="visibility:hidden;">';
-         echo '<input type="date" class="date" name="dataFineBan" value="'.date("Y-m-d").'" />';
+         echo '<input type="date" class="date" name="dataFineBan" value="'.date("Y-m-d", strtotime("+1 day")).'" />';
          echo '</div>';
 
       }//end if controllo admin 

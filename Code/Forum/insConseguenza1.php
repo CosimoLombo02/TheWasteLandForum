@@ -1,8 +1,13 @@
 <?php
 session_start();
 require "funzioniUtili.php";
+//filtro per il warning
+if(isset($_POST['w'])){
+    $filtro = $_POST['w'];
+    $_POST['w'] = trim($filtro);
+}
 
-var_dump($_SESSION);
+//var_dump($_SESSION);
 
 if(isset($_POST['valuta'])){
 if(isset($_POST['nP'])){
@@ -36,7 +41,7 @@ if(isset($_POST['nP'])){
         }
 
         if(isset($_POST['sU'])){
-            if($_POST['sU']=='si'){
+            if($_POST['sU']=='si' && sonoSospeso($_SESSION['codiceDiscussione'],$_SESSION['ucp'])==false){
                 sospendiUtente($_SESSION['codiceDiscussione'],$_SESSION['ucp']);
             }
         }

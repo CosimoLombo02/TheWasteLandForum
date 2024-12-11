@@ -1009,6 +1009,7 @@ function modificaValutazionePost($comando,$nomeUtente,$codiceDiscussione,$codice
         $postL = $listaPost->getElementsByTagName('post');
         foreach($postL as $post){
             if($post->getElementsBytagName('codicePost')->item(0)->nodeValue==$codicePost){
+                //$creatorePost = $post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue;
                 //a seconda del comando inserisco il tipo di valutazione
                 if($comando == 0){
                    $valutazioniUt = $post->getElementsByTagName('valPostUtilità')->item(0);
@@ -1024,7 +1025,7 @@ function modificaValutazionePost($comando,$nomeUtente,$codiceDiscussione,$codice
                         //sezione punti
                         $punti =0;
                         //in questi due casi restituiamo i punti tolti precedentemente
-                        if($old==1) $punti+=2;
+                       /* if($old==1) $punti+=2;
                         if($old==2) $punti+=1;
 
                         //in questi altri due casi invece i punti li togliamo
@@ -1041,8 +1042,28 @@ function modificaValutazionePost($comando,$nomeUtente,$codiceDiscussione,$codice
                         default: echo "errore!";break;
 
                     }//end switch
-                    //ora aggiorno i punti
-                    punti($nomeUtente,$punti);
+                    */
+                    //con questi switch controllo l'aggiornamento della valutazione
+                    //con questo primo switch elimino gli effetti della valutazione precedente
+                    switch($old){
+                        case 1:  punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,2); break;
+                        case 2: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,1); break;
+                        case 3: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,0); break;
+                        case 4: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-1); break;
+                       case 5: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-2); break;
+                       default: echo "errore generico"; break;
+                    }
+
+                    //con questo invece invio gli effetti della nuova valutazione
+                    switch($valore){
+                        case 1:  punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-2); break;
+                        case 2: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,-1); break;
+                        case 3: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,0); break;
+                        case 4: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,+1); break;
+                       case 5: punti($post->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue,+2); break;
+                       default: echo "errore generico"; break;
+                    }
+                  
                     }//end controllo nomeUtente
                    }//end foreach 
 
@@ -1597,12 +1618,14 @@ function cambiaCategoriaSpoiler($nome,$codiceDiscussione,$valoreNew){
             $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue = $nome;
             $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue = $valoreNew;
            $valS = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0);
-           $val = $valS->getElementsByTagName('valutazioneDiscussioneSpoiler');
-           if($valS->childNodes->count()>0){
-            foreach($val as $v){
-                $valS->removeChild($v);
-            }//end foreach interno
-           }//end if count
+        /* echo $valS->childElementCount;
+         echo $valS->childNodes->count();
+         echo $codiceDiscussione;
+           if($valS->childNodes->count() > 0){
+            
+            eliminaValutazioniSpoilerDiscussione($codiceDiscussione); //elimino tutte le valutazioni spoiler
+         }*/
+        //eliminaValutazioniSpoilerDiscussione($discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue);
         
         }//end if codice discussione
 
@@ -1616,6 +1639,34 @@ function cambiaCategoriaSpoiler($nome,$codiceDiscussione,$valoreNew){
     }
 
 }//end cambia categoria Spoiler
+
+// questa funzione serve per eliminare le valutazioni spoiler di una discussione
+function eliminaValutazioniSpoilerDiscussione($codiceDiscussione){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+    $root = $doc->documentElement;
+
+    foreach($discussioni as $discussione){
+        $conta = $discussione->getElementsByTagName('valutazioniDiscussioneSpoiler')->item(0)->childElementCount;
+        $codice = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($codice == $codiceDiscussione && $conta > 0){
+            //mi posiziono sul tag valutazioni discussione spoiler e elimino i figli
+            $figli = $discussione -> getElementsByTagName('valutazioneDiscussioneSpoiler');
+            $padre = $figli->item(0)->parentNode;
+            while($padre->firstChild){
+                $padre->removeChild($padre->firstChild);
+            }
+            
+
+        }//end if codice discussione
+    }
+
+    //qui ora devo salvare le modifiche effettuate 
+    if($doc->schemaValidate("../XML/SchemiXSD/schemaDiscussioni.xsd")){
+        $doc->save("../XML/Discussioni.xml");
+    }
+
+}//end elimina valutazioni discussione spoiler
 
 /*questa funzione mi permette di cambiare una sottocategoria
 function cambiaCategoria($categoria,$codiceDiscussione){
@@ -1879,19 +1930,157 @@ function giaInseritaCat($nome1,$nome2){
 function eliminaSegnalazione($codiceDiscussione){
     $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
     $segnalazioni = $doc->getElementsByTagName('segnalazione');
-    $root = $doc->documentElement;
-    foreach($segnalazioni as $segnalazione){
-        $codiceDis = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
-        if($codiceDis == $codiceDiscussione){
-            $root->removeChild($segnalazione);
-        }
-    }
-    if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
-        $doc->save("../XML/segnalazioni.xml");
-    }
+  
+$segnalazioniRim = []; //array delle segnalazioni da rimuovere
+foreach($segnalazioni as $segnalazione){
+    $codiceDis = $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+    if($codiceDis == $codiceDiscussione){
+        $segnalazioniRim[] = $segnalazione; //raccolgo le segnalazioni da rimuovere
+    }//end if 
+}//end foreach
 
+//var_dump($segnalazioniRim); debug 
+
+//in questo for elimino le segnalazioni e anche le conseguenze 
+foreach($segnalazioniRim as $s){
+    //se c'è la conseguenza allora la elimino, altrimenti no
+    if(presenzaConseguenze($s->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue)==true){
+       // echo "sono qui"; debug 
+        eliminaConseguenza($s->getElementsByTagName('codiceSegnalazione')->item(0)->nodeValue);
+    }
+    
+    $s->parentNode->removeChild($s);
+}//end foreach
+
+//qui salvo sia in schema segnalazioni che nelle conseguenze 
+if($doc->schemaValidate("../XML/SchemiXSD/schemaSegnalazioni.xsd")){
+    $doc->save("../XML/segnalazioni.xml");
+}
 
 }//end eliminaSegnalazione
 
+//questa funzione serve per eliminare la conseguenza di una segnalazione
+function eliminaConseguenza($code){
+    $doc=caricaXML("conseguenzeSegnalazioni.xml","");
+    $conseguenze = $doc->getElementsByTagName('ConseguenzaSegnalazioni');
+    foreach($conseguenze as $conseguenza){
+        if($conseguenza->getElementsbyTagName('codiceSegnalazione')->item(0)->nodeValue==$code){
+            $conseguenza->parentNode->removeChild($conseguenza); //rimuovo il nodo dal file
+        }//end if 
+
+    }//end foreach
+
+    //ora salvo tutto nel file xml
+    if($doc->validate()){
+        $doc->save("../XML/conseguenzeSegnalazioni.xml");
+    }
+    
+}//end elimina conseguenza 
+
+//questa funzione conta le segnalazioni 
+//comando = 0 segnalazioni non lavorate
+//comando = 1 segnalazioni lavorate
+//comando =  2 segnalazioni con risalto
+function contaSegnalazioni($codDiscussione,$comando){
+    $conta = 0; 
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+    $segnalazioni = $doc->getElementsByTagName('segnalazione');
+    
+    foreach($segnalazioni as $segnalazione){
+        $rA = $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue;
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue == 'in lavorazione' && $comando == 0 && $rA==0 && $_SESSION['username']!=$segnalazione->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue && $_SESSION['username']!=$segnalazione->getElementsByTagName('utenteSegnalatore')->item(0)->nodeValue){
+            $conta++; 
+        }
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('stato')->item(0)->nodeValue != 'in lavorazione' && $comando == 1){
+            $conta++;
+        }
+        if($segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==$codDiscussione && $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue == 1 && $comando == 2){
+            $conta++;
+        }
+      
+    }
+   
+    return $conta  ;
+}//end contaSegnalazioni
+
+//questa funzione invece con le segnalazioni con risalto dell'intero sistema
+function contaSegnalazioniRisalto(){
+    $conta = 0; 
+    $doc=caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+    $segnalazioni = $doc->getElementsByTagName('segnalazione');
+    
+    foreach($segnalazioni as $segnalazione){
+       
+        if( $segnalazione->getElementsByTagName('risaltoAdmin')->item(0)->nodeValue == 1 ){
+            $conta++;
+        }
+      
+    }
+   
+    return $conta  ;
+}//end contaSegnalazioniRisalto
+
+//questa funzione serve per ritornare lo stato di una discussione
+function statoDiscussione($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('statoDiscussione')->item(0)->nodeValue;
+    }
+
+}
+
+//questa funzione restituisce la categoria di spoiler  di una discussione attraverso il suo codice
+function ritornaTipoSpoiler($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('CategoriaSpoiler')->item(0)->nodeValue;
+    }
+
+    
+
+  }//end function
+
+  //questa funzione ritorna lo spoiler level di una discussione
+  function ritornaLevelSpoiler($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('SpoilerLevel')->item(0)->nodeValue;
+    }
+
+    
+
+  }//end function
 
 
+//questa funzione serve per ritornare la categoria di una discussione
+function ritornaCategoria($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('Categoria')->item(0)->nodeValue;
+    }
+
+}//end function
+
+//questa funzione ritorna una sottocategoria di una discussione
+function ritornasottoCategoria($code){
+    $doc=caricaXML("Discussioni.xml","schemaDiscussioni.xsd");
+    $discussioni = $doc->getElementsByTagName('discussione');
+
+    foreach($discussioni as $discussione){
+        $c = $discussione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue;
+        if($code == $c) return $discussione->getElementsByTagName('Sottocategoria')->item(0)->nodeValue;
+    }
+
+}//end function

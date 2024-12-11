@@ -217,10 +217,7 @@ div.sinistra{
   cursor: pointer;
 }
 
-div.sinistra2{
-  position:relative;
-  transform: translate(40%,-470%); /*x - y*/
-}
+
 
 select.sCustom{
   color:green;

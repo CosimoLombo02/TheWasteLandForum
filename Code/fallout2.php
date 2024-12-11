@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?php
-session_start();
+session_start(); require "Forum/riferimento.php";
 ?>
 
 <!DOCTYPE html

@@ -2,6 +2,7 @@
 <!--Questa è la pagina scheletro di ogni bacheca personale-->
 <?php
 session_start(); 
+require "riferimento.php";
 if(isset($_SESSION['codice'])) unset($_SESSION['codice']);
 if(isset($_SESSION['codDiscussione'])) unset($_SESSION['codDiscussione']);
 if(isset($_SESSION['titolo'])) unset($_SESSION['titolo']);
@@ -48,9 +49,15 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
     <script type="text/javascript" src="../JS/popUp.js"></script>
     <script type="text/javascript" src="../JS/onchange1.js"></script>
-    <script type="text/javascript" src="../JS/controllaInput.js"></script>
-    <script type="text/javascript" src="../JS/controllaInput1.js"></script>
-    <script type="text/javascript" src="../JS/controllaInput2.js"></script>
+<!--<script type="text/javascript" src="../JS/controllaInput.js"></script>-->
+    <script type="text/javascript" src="../JS/controllaInputMS.js"></script>
+    <script type="text/javascript" src="../JS/controllaInputSI.js"></script>
+    <script type="text/javascript" src="../JS/controllaInputSott.js"></script> 
+
+ 
+
+   
+    
     
 </head>
 <body>
@@ -176,7 +183,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
             echo '<div id="popup">';
             echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
             echo '<h3>Nuovo spoiler </h3>';
-            echo '<form id="popupForm" action="nuovoSpoiler.php" method="POST" >';
+            echo '<form id="popupForm" action="nuovoSpoiler.php" method="POST" onsubmit="preventSI(event)" >';
             echo '<p class="testoGenerico">Nuovo:</p>';
             $doc=caricaXML("CategorieSpoiler.xml","");
             $categorieSpoiler = $doc->getElementsByTagName('CategoriaSpoiler');
@@ -213,7 +220,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                     echo '<div id="popup">';
                     echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
                     echo '<h3>Nuovo  spoiler </h3>';
-                    echo '<form id="popupForm" action="nuovoSpoilerM.php" method="POST" >';
+                    echo '<form id="popupForm" action="nuovoSpoilerM.php" method="POST" onsubmit="preventMS(event)" >';
                     echo '<p class="testoGenerico">Nuovo:</p>';
                     $doc=caricaXML("CategorieSpoiler.xml","");
                     $categorieSpoiler = $doc->getElementsByTagName('CategoriaSpoiler');
@@ -260,7 +267,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
                     echo '<div id="popup">';
                     echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
                     echo '<h3>Categoria/sottocategoria </h3>';
-                    echo '<form id="popupForm" action="cat.php" method="POST" >';
+                    echo '<form id="popupForm" action="cat.php" method="POST" onsubmit="preventSott(event)" >';
                     echo '<p class="testoGenerico">Nuova:</p>';
                     $doc=caricaXML("sottocategorie.xml","");
                     $sottocategorie = $doc->getElementsByTagName('Sottocategoria');

@@ -14,6 +14,7 @@
     <!--i link cambiano a seconda se si è loggati o meno-->
     <?php
     session_start();
+    require "riferimento.php";
     /* if(isset($_SESSION['username'])){
         
     $User=$_SESSION['username'];

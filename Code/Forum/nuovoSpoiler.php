@@ -2,6 +2,19 @@
 session_start();
 require "funzioniUtili.php";
 
+//filtro con trim
+if(isset($_POST['csc']) && $_POST['categorieSpoiler']=='altroS'){
+    $filtro = $_POST['csc'];
+    if(trim($_POST['csc'])==''){
+        echo "<html><head><script>alert('Testo vuoto, modifica non effettuata!'); window.location.href='Admin.php'</script></head><body></body></html>";
+        die();
+    }else{
+         $filtro = trim($_POST['csc']);
+         $_POST['csc'] =$filtro;
+    }
+
+}
+
 if(isset($_SESSION['codice'])){
 
     if(isset($_POST['categorieSpoiler'])){

@@ -43,7 +43,7 @@ div.topnav {
   div.pannelloSinistro{
     position: relative;
     left:0%;
-    height:100%;
+    height:70%;
     width:30%;
     border-style: solid;
     border-color:green;
@@ -56,7 +56,7 @@ div.topnav {
     max-height:500px;
     border-style:none;
     overflow-y: scroll;
-    transform: translateY(-10%); /*per metterlo più in alto o piu in basso*/
+    transform: translateY(-15%); /*per metterlo più in alto o piu in basso*/
   }
 
   p.testoGenerico{
