@@ -6,7 +6,6 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
 
 <!DOCTYPE html> <!--questa potrebbe  contenere  video, viene usato html 5-->
 
-
 <html>
 
 
@@ -22,7 +21,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     <script type="text/javascript" src="../JS/sparisciAnnulla.js"></script>
     <script type="text/javascript" src="../JS/funzioniGestioneRefresh.js"></script>
     <script type="text/javascript" src="../JS/onchange.js"></script>
-    <script type="text/javascript" src="../JS/precedente.js"></script>
+   
    
     
 </head>
@@ -625,24 +624,8 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
         <input type="submit" name="inserisci" value="Inserisci Discussione" />
        
 
-        
-        <input type="reset" value="Annulla" onclick="sparisciAnnulla('spoiler','catSpoilerCustom','sottoCategoriaCustom')"/>
-            <!--La cronologia deve essere attiva per l'history-->
-        <input type="submit" name="indietro" value="Torna indietro"/> 
+        <input type="reset" value="annulla" onclick="sparisciAnnulla('spoiler','catSpoilerCustom','sottoCategoriaCustom')"/>
         <?php
-        //se premiamo torna indietro torno nella pagina da cui sono venuto
- if(isset($_POST['indietro'])){
-    if (isset($_SESSION['rif'])) {
-        $rif = $_SESSION['rif'];
-        var_dump($rif);
-        echo "<script type='text/javascript'>
-      window.location.href = '$rif';
-      </script>";
-    }
-}//end if isset premo indietro
-
-
-
         //reindirizziamo ad una pagina che poi reindirzza a questa pagina per evitare la reimissione del form(è vero è un po' una zingarata)
         if(isset($_POST['annulla'])){
             header("Location: redirect.php");

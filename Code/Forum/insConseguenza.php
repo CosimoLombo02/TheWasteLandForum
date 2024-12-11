@@ -2,13 +2,6 @@
 session_start();
 require "funzioniUtili.php";
 
-//filtro per il warning
-if(isset($_POST['w'])){
-    $filtro = $_POST['w'];
-    $_POST['w'] = trim($filtro);
-    
-}
-
 
 if(isset($_POST['valuta'])){
 if(isset($_POST['nP'])){
@@ -42,8 +35,7 @@ if(isset($_POST['nP'])){
         }
 
         if(isset($_POST['sU'])){
-            //se è già sospeso allora non lo sospendo di nuovo
-            if($_POST['sU']=='si' && sonoSospeso($_SESSION['codice'],$_SESSION['ucp'])==false){
+            if($_POST['sU']=='si'){
                 sospendiUtente($_SESSION['codice'],$_SESSION['ucp']);
             }
         }

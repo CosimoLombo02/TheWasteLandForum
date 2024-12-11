@@ -3,7 +3,6 @@
 
 session_start();
 require_once "funzioniUtili.php";
-require "riferimento.php";
 
      
 ?>

@@ -1,34 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-
-<!DOCTYPE html
-PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
-
-<head>
-    <title> Gestione Utenti</title> 
-    <link rel ="stylesheet" href="../CSS/bachecapersonale.css" type = "text/css" />
-    <link rel ="stylesheet" href="../CSS/adminStile.css" type = "text/css" />
-    <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
-    <script type="text/javascript" src="../JS/popUp.js"></script>
-    
-</head>
-<body>
 <?php
 
-session_start(); require "riferimento.php";
+session_start();
 require_once "funzioniUtili.php";   require "connection1.php"; //require "mostraNavBar1.php";
-require "mostraNavBar1.php";
 if(isset($_SESSION['username'])){
     if(ritornaRuolo($_SESSION['username']) == 0){
         header("Location: ../homepage.php"); //gli utenti normali non possono entrare qui
          }else{
             $User = $_SESSION['username'];
-            //echo "<div class='topnav'><a href='../logout.php'>Logout</a><a href='forumHP.php'>Homepage Forum</a><a href='../homepage.php'>Pagina iniziale</a><a href='regGenerali.php'>Regole Generali</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a><a href='nuovaDiscussione.php'>Nuova discussione</a><a href='discussioni.php'>Discussioni</a><a href='bachecaPersonale.php'>$User</a><a href='gestioneUtenti.php'>Gestione Utenti</a><a href='gestioneCategorie.php'>Gestione categorie e sottocategorie</a></div>";
+            echo "<div class='topnav'><a href='../logout.php'>Logout</a><a href='forumHP.php'>Homepage Forum</a><a href='../homepage.php'>Pagina iniziale</a><a href='regGenerali.php'>Regole Generali</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a><a href='nuovaDiscussione.php'>Nuova discussione</a><a href='discussioni.php'>Discussioni</a><a href='bachecaPersonale.php'>$User</a><a href='gestioneUtenti.php'>Gestione Utenti</a><a href='gestioneCategorie.php'>Gestione categorie e sottocategorie</a></div>";
          }
         }else header("Location: ../reservedArea.php");
 
@@ -58,6 +38,24 @@ if(isset($_SESSION['username'])){
     }
 
 ?>
+
+
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+
+<head>
+    <title> Gestione Utenti</title> 
+    <link rel ="stylesheet" href="../CSS/bachecapersonale.css" type = "text/css" />
+    <link rel ="stylesheet" href="../CSS/adminStile.css" type = "text/css" />
+    <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
+    <script type="text/javascript" src="../JS/popUp.js"></script>
+    
+</head>
+<body>
     
         <div class="colonnaGrandeScroll">
             <?php

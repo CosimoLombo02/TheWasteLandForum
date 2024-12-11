@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<segnalazioni/>
+<segnalazioni><segnalazione><codiceSegnalazione>23</codiceSegnalazione><utenteSegnalatore>account1</utenteSegnalatore><data>2024-11-29</data><codicePostSegnalato>2</codicePostSegnalato><codiceDiscussione>1</codiceDiscussione><motivazione>linguaggioOff</motivazione><utenteCreatorePost>testBan</utenteCreatorePost><stato>accettata</stato><risaltoAdmin>1</risaltoAdmin></segnalazione></segnalazioni>

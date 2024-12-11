@@ -13,11 +13,15 @@ require "funzioniUtili.php";
 //eliminaCategoriaSpoiler('');
 /*if(giaInseritaCat('h','Mods')==false)echo "ciao";
 else echo "we";*/
-//echo contaSegnalazioni(1,1);
-//eliminaValutazioniDiscussione(1);
-//cambiaCategoriaSpoiler('ciao',1,3);
-//eliminaValutazioniSpoilerDiscussione(1);
-//punti('account1',-2);
-//valutaPost(0,1,1,date('Y-m-d'),5,'test668');
-eliminaSegnalazione(1);
+$doc = caricaXML("segnalazioni.xml","schemaSegnalazioni.xsd");
+$segnalazioni = $doc->getElementsByTagName('segnalazione');
+$i = 0;
+foreach($segnalazioni as $segnalazione){
+    if($segnalazione->getElementsByTagName('stato')->item(0)->nodeValue!='in lavorazione' && $segnalazione->getElementsByTagName('codiceDiscussione')->item(0)->nodeValue==3){
+        $i++;
 
+    }
+
+}
+
+echo $i;

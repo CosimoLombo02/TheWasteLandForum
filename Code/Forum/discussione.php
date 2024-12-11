@@ -1,25 +1,9 @@
 <?php
 session_start();
-require "riferimento.php";
-require "funzioniUtili.php"; //require "mostraNavBar1.php";
-if(isset($_SESSION['username'])){
+require "funzioniUtili.php";
 //se sono sospeso non posso accedere a questa discussione
 if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
-    //qui controlliamo la pagina precedente che ha fatto la richiesta http
-    //se proveniamo da discussioni.php allora ritorniamo in discussionià
-    //altrimenti torniamo in bacheca personale
-    //questo perchè solo da queste due pagine nel caso non admin posso accedere alla pagina delle discussioni
-    //ricordiamo che ovviamente un admin non puo' essere sospeso da una discussione
-    if (isset($_SERVER['HTTP_REFERER'])){
-        $precedente = $_SERVER['HTTP_REFERER'];
-        if(str_contains($precedente,'discussioni')){
-            echo "<html><head><script>alert('Sei stato sospeso dalla discussione!'); window.location.href='discussioni.php'</script></head><body></body></html>";
-        }else{
-            echo "<html><head><script>alert('Sei stato sospeso dalla discussione!'); window.location.href='bachecapersonale.php'</script></head><body></body></html>";
-        }
-
-    }//end if isset referer
-}//end if sono sospeso
+    echo "<html><head><script>alert('Sei stato sospeso dalla discussione!'); window.location.href='discussioni.php'</script></head><body></body></html>";
 }
 ?>
 <!DOCTYPE html>
@@ -30,13 +14,29 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
     <link rel="icon" type="image/x-icon" href="../ImmaginiVideoSito/favicon.ico"/> <!--Rubata dai dati di gioco di Fallout New Vegas-->
     <script type="text/javascript" src="../JS/controllaNumeroFile.js"></script>
     <script type="text/javascript" src="../JS/popUp.js"></script>
-    <script type="text/javascript" src="../JS/controllaInputInserimentoPost.js"></script>
 </head>
 <body>
 
+<?php /* if(isset($_SESSION['username'])){
+        
+        $username=$_SESSION['username'];
+        
+                echo "<div class='topnav'><a href='../logout.php'>Logout</a><a href='../homepage.php'>Pagina iniziale</a><a href='forumHP.php'>Forum</a><a href='regGenerali.php'>Regole Generali</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a><a href='discussioni.php'>Discussioni</a><a href='nuovaDiscussione.php'>Nuova discussione</a><a href='bachecaPersonale.php'>$username</a></div>";
+    
+            }else{
+                
+                echo "<div class='topnav'><a href='../reservedArea.php'>Login</a><a href='../homepage.php'>Pagina iniziale</a><a href='forumHP.php'>Forum</a><a href='regGenerali.php'>Regole Generali</a><a href='../fallout1.php'>Fallout 1</a><a href='../fallout2.php'>Fallout 2</a><a href='../fallout3.php'>Fallout 3</a><a href='../fallout4.php'>Fallout 4</a><a href='../falloutT.php'>Fallout Tactics</a><a href='../falloutB.php'>Fallout Brotherhood Of Steel</a><a href='../falloutN.php'>Fallout New Vegas</a><a href='../fallout76.php'>Fallout 76</a><a href='../falloutS.php'>Fallout Serie TV</a><a href='discussioni.php'>Discussioni</a></div>";
+    
+    
+                }//end else 
 
+                */
+                require "mostraNavBar1.php";
+                
+        
+                ?>
                  
-<?php require "mostraNavBar1.php"; ?>
+
 
 
 
@@ -61,22 +61,14 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                     }
 
                     if(ritornaRuolo($_SESSION['username'])==1){
-                        //eliminata per noi significa nascosta
-                        if(statoDiscussione($_SESSION['codice'])!='eliminata')
+                        
                         echo '<input class="button1" type="submit" name = "nd" value="Nascondi discussione" />';
-                        else echo '<input class="button1" type="submit" name = "nA" value="Attiva discussione" />';
-
                     }
                     
                     echo '</form>';
-                    if(isset($_POST['nA'])){
-                        operaSuDiscussione(0,$_SESSION['codice']);
-                       // header('Location:discu.php');
-
-                    }
                     if(isset($_POST['nd'])){
                         operaSuDiscussione(1,$_SESSION['codice']);
-                       // header('Location:admin.php');
+                        header('Location:admin.php');
 
                     }
                     if(isset($_POST['p'])) $_SESSION['flagPost']=1;
@@ -116,7 +108,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                         foreach($post as $p){
                             $creatorePost = $p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue;
                          
-                            if(sonoSospeso($_SESSION['codice'],$creatorePost)==false && $creatorePost!=$_SESSION['username']){
+                            if(sonoSospeso($_SESSION['codice'],$creatorePost)==false){
                                echo "<option value='$creatorePost'>".$creatorePost."</option>";
                               // echo '<option>test</option>';
                             }
@@ -129,7 +121,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                         foreach($post as $p){
                             $creatorePost = $p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue;
                          
-                            if(sonoSospeso($_SESSION['codice'],$creatorePost)==false && ritornaRuolo($creatorePost)==0 && $creatorePost!=$_SESSION['username']){
+                            if(sonoSospeso($_SESSION['codice'],$creatorePost)==false && ritornaRuolo($creatorePost)==0){
                                echo "<option value='$creatorePost'>".$creatorePost."</option>";
                               // echo '<option>test</option>';
                             }
@@ -258,7 +250,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
                         $post = $lPost->getElementsByTagName('post'); //prendo i post (figli di listapost)
                         foreach($post as $p){
                             if(ritornaRuolo($p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue) == 0){
-                                if(sonoModeratore($_SESSION['codice'],$p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue)==false && ritornaCreatoreDiscussione($_SESSION['codice'])!=$p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue){
+                                if(sonoModeratore($_SESSION['codice'],$p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue)==false){
                                    $value = $p->getElementsByTagName('utenteCreatorePost')->item(0)->nodeValue;
                                    echo "<option value='$value'>".$value."</option>";
                                 }//end if sono moderatore
@@ -589,7 +581,7 @@ if(sonoSospeso($_SESSION['codice'],$_SESSION['username'])){
     echo '<div id="popup">';
     echo '<span class="close-btn" id="closePopup" onclick="closePopup()">&times;</span>';
     echo '<h3>Inserisci Post</h3>';
-    echo '<form id="popupForm" action="insPost.php" method="POST" onsubmit="preventINS(event)" enctype="multipart/form-data">';
+    echo '<form id="popupForm" action="insPost.php" method="POST" enctype="multipart/form-data">';
     echo '<label for="testo">Testo post:</label>';
     echo '<textarea id="testo" rows="10" cols="50" name="testo" required></textarea><br /><br />';
     echo '<input class="button" type="file" id="fileInput" name="files[]" multiple="multiple" accept="image/png,image/jpeg,image/jpg,image/gif,video/*"/><div id="anteprima"></div>';

@@ -4,7 +4,7 @@ require "funzioniUtili.php";
 //var_dump($_SESSION); var_dump($_POST);
 //se la segnalazione è gia presente semplicemente la ignoriamo e non la inseriamo
 if(presenzaSegnalazione($_SESSION['username'],$_SESSION['codPost'],$_SESSION['codice'],$_POST['motivo'])==false){
-    if(sonoModeratore($_SESSION['codice'],$_SESSION['username'])==true || (ritornaCreatoreDiscussione($_SESSION['codice'])==$_SESSION['username'] && ritornaRuolo($_SESSION['username'])==0) || $_SESSION['creatorePost']==ritornaCreatoreDiscussione($_SESSION['codice'])){
+    if(sonoModeratore($_SESSION['codice'],$_SESSION['username'])==true || (ritornaCreatoreDiscussione($_SESSION['codice'])==$_SESSION['username'] && ritornaRuolo($_SESSION['username'])==0)){
         $risaltoAdmin =1;
     } 
     else $risaltoAdmin = 0;
